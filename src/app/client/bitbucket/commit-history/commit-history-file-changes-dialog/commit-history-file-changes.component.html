@@ -1,0 +1,86 @@
+<div class="commit-file-changes-container mat-elevation-z8">
+    <div class="header-filter">
+        <div class="searchbar__container">              
+            <div class="toolbar__btns">
+                <mat-svg-icon  
+                    title="Switch To Table View" 
+                    icon="table_view" 
+                    [disabled]="!dataSource?.length>0"
+                    button="true"
+                    (onClickEvent)="switchView('table')">
+                </mat-svg-icon>  
+                <mat-svg-icon  
+                    title="Switch To Folder View" 
+                    icon="folder_view" 
+                    [disabled]="!dataSource?.length>0"
+                    button="true"
+                    (onClickEvent)="switchView('folder')">
+                </mat-svg-icon>  
+                <mat-svg-icon  
+                    title="Export To Excel" 
+                    icon="xls_glossy" 
+                    [disabled]="!dataSource?.length>0"
+                    button="true"
+                    (onClickEvent)="exportToExcel()">
+                </mat-svg-icon>  
+            </div>
+        </div>
+    </div>
+
+    <table mat-table [dataSource]="dataSource" *ngIf="!folderView">
+        <!-- Position Column -->
+        <ng-container matColumnDef="position">
+        <th mat-header-cell *matHeaderCellDef> No. </th>
+        <td class="file__row" mat-cell *matCellDef="let element" [style.color]="element.color"> {{element.position}} </td>
+        </ng-container>
+
+        <!-- Name Column -->
+        <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef> File Name </th>
+        <td class="file__row" mat-cell *matCellDef="let element" [style.color]="element.color"> {{element.name}} </td>
+        </ng-container>
+
+        <!-- Path Column -->
+        <ng-container matColumnDef="path">
+        <th mat-header-cell *matHeaderCellDef> Path </th>
+        <td class="file__row" mat-cell *matCellDef="let element" [style.color]="element.color"> {{element.path}} </td>
+        </ng-container>
+
+        <!-- Type Column -->
+        <ng-container matColumnDef="type">
+        <th mat-header-cell *matHeaderCellDef> Type </th>
+        <td class="file__row" mat-cell *matCellDef="let element" [style.color]="element.color"> {{element.type}} </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+
+    <div class="foler__view" *ngIf="folderView">
+        <div class="file-explorer-toolbar">
+            <mat-svg-icon  
+                title="Expand All" 
+                icon="folder_open" 
+                [disabled]="!dataSource?.length>0"
+                button="true"
+                (onClickEvent)="switchView('folder')">
+            </mat-svg-icon>
+            <mat-svg-icon  
+                title="Collapse All" 
+                icon="folder_close" 
+                [disabled]="!dataSource?.length>0"
+                button="true"
+                (onClickEvent)="switchView('folder')">
+            </mat-svg-icon>  
+        </div>
+        <ngx-file-explorer 
+            [root]="commitHistoryFileExplorerData"
+            [expandAll] = "expandAll"
+            [collapseAll] = "collapseAll"
+            [keyboardWatch]=true>
+        </ngx-file-explorer>
+    </div>
+</div>
+<div mat-dialog-actions class="action__btn">
+    <button mat-raised-button color="warn" (click)="onClickClose()">Close</button>
+</div>

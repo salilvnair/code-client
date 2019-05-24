@@ -1,0 +1,17 @@
+<div class="config__container">
+    <mat-form-field appearance="outline">
+        <mat-label>Bearer Token</mat-label>
+        <input matInput  [(ngModel)]="bearerToken" #tokenInput="ngModel"
+            placeholder="Enter Bearer Token" required>
+        <mat-svg-icon 
+            matSuffix 
+            title="Bearer Token"
+            icon="key">
+        </mat-svg-icon>
+        <mat-hint>Goto Account >> Personal access tokens and create a new token</mat-hint>
+        <mat-error *ngIf="tokenInput.hasError('required')">Token cannot be empty!</mat-error>
+    </mat-form-field>
+    <div class="config__btns">
+        <button mat-raised-button color="primary" [disabled]="tokenInput.errors" (click)="saveConfig()">Save</button>
+    </div>   
+</div>

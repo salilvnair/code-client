@@ -1,0 +1,13 @@
+.config__container {
+    margin: 20px;
+    display: flex;
+    flex-direction: column;
+    max-width: 600px;
+    margin-left: 30%;
+    margin-top: 8%;
+}
+
+.config__btns {
+    display: flex;
+    justify-content: flex-end;
+}

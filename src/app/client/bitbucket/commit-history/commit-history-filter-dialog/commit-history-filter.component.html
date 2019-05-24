@@ -1,0 +1,72 @@
+<h1 mat-dialog-title>Filter By Column</h1>
+<div mat-dialog-content>
+  <div class="form-field-container">
+      <mat-form-field>
+        <!-- <mat-select #authorSelect 
+          [(value)]="selectedAuthors"
+          placeholder="Author" 
+          (selectionChange)="dirtyCheck()"
+          multiple>
+            <mat-option *ngFor="let author of authors" 
+                [value]="author">{{author}}</mat-option>
+        </mat-select> -->
+        <mat-select [formControl]="bankMultiCtrl" 
+            placeholder="Authors" 
+            [(value)]="selectedAuthors"
+            (selectionChange)="dirtyCheck()"
+            multiple #authorSelect>
+          <ngx-mat-select-search 
+              placeholderLabel="Select author names"
+              [formControl]="bankMultiFilterCtrl">
+              <mat-svg-icon 
+                matPrefix 
+                title="Clear"
+                ngxMatSelectSearchClear
+                icon="close"
+              >
+            </mat-svg-icon>
+          </ngx-mat-select-search>
+          <mat-option 
+              *ngFor="let author of filteredBanksMulti | async" 
+              [value]="author">
+            {{author}}
+          </mat-option>
+        </mat-select>
+        <mat-svg-icon 
+            matSuffix 
+            title="Authors"
+            transform="scale(0.7)"
+            icon="authors">
+        </mat-svg-icon>
+      </mat-form-field>
+        
+      <mat-form-field>
+        <input matInput 
+              [(ngModel)]="fromDate" 
+              [matDatepicker]="fromPicker" 
+              (dateInput)="dirtyCheck()"
+              (dateChange)="dirtyCheck()"
+              placeholder="From">
+        <mat-datepicker-toggle matSuffix [for]="fromPicker"></mat-datepicker-toggle>
+        <mat-datepicker #fromPicker
+         startView="year"
+          [startAt]="startDate"
+          ></mat-datepicker>
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput 
+              [(ngModel)]="toDate" 
+              [min]="fromDate" 
+              [matDatepicker]="toPicker"
+              (dateInput)="dirtyCheck()"
+              (dateChange)="dirtyCheck()"
+              placeholder="To">
+        <mat-datepicker-toggle matSuffix [for]="toPicker"></mat-datepicker-toggle>
+        <mat-datepicker #toPicker startView="year" [startAt]="fromDate"></mat-datepicker>
+      </mat-form-field>
+    </div>
+</div>
+<div mat-dialog-actions class="action__btn">
+  <button mat-raised-button color="warn" (click)="clearFilters()">{{closeButtonText}}</button>
+  <button mat-raised-button color="primary" [disabled]="disableOk" (click)="onOkClick()">Ok</button>
+</div>

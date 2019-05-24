@@ -1,0 +1,33 @@
+<div class="header__toolbar header-bar">
+    <mat-toolbar color="primary" class="header-bar">
+        <div fxFlex fxLayout fxLayoutAlign="flex">
+        <ul fxLayout fxLayoutGap="50px" class="navigation-items">
+            <li>
+                <a mat-button>
+                    <img class="app-logo" src="assets/logo/code-client-64.png" alt="CodeClient" />
+                    <span class="header__title" id="headerTitle">Code Client</span>                  
+                </a>
+            </li>
+            <li>
+                <a 
+                    routerLink="/dashboard"
+                    [ngStyle]="getHighlightColor('/dashboard')"
+                    (click)="currentlyActive('/dashboard')"
+                    mat-button >
+                Dashboard
+                </a>
+            </li>
+            <li>
+                <a 
+                    routerLink="/settings"
+                    [ngStyle]="getHighlightColor('/settings')"
+                    (click)="currentlyActive('/settings')"
+                    mat-button >
+                Settings
+                </a>
+            </li>
+        </ul>
+        </div>
+    </mat-toolbar>
+    <mat-header-progress></mat-header-progress>
+</div>

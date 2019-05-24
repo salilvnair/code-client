@@ -1,16 +1,24 @@
-import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
 
+import { NgModule } from '@angular/core';
+import { NgpaRepositoryModule } from '@salilvnair/ngpa';
 import { AppComponent } from './app.component';
+import { CodeClientModule } from './modules/codeclient.module';
 
 @NgModule({
   declarations: [
     AppComponent
   ],
   imports: [
-    BrowserModule
+    CodeClientModule,
+    NgpaRepositoryModule.configure(
+      { 
+        applicationName:'codeclient',
+        createExplicitDB:true,
+        inMemoryDB:false,
+        storeInUserHome:true
+      }
+    )
   ],
-  providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

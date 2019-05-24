@@ -1,0 +1,11 @@
+.config__container {
+    display: flex;
+    flex-direction: column;
+    max-width: 600px;
+    margin-top: 8%;
+}
+
+.config__btns {
+    display: flex;
+    justify-content: flex-end;
+}
