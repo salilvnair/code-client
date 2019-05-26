@@ -79,3 +79,11 @@ td.file__row {
   width: 80%;
   margin:12.2px 12.2px 12.2px 0px;
 }
+
+.file-explorer-toolbar {
+  margin-left: 400px;
+}
+
+.margin-20LR {
+  margin: 0px 20px 0px 20px;
+}

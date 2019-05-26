@@ -1,17 +1,20 @@
 import { Injectable } from '@angular/core';
 import { CommitHistoryData } from '../model/commit-history.model';
-import { CodeClientApi } from 'src/app/api/codeclient.api';
+import { BitbucketApi } from '../../../api/client/bitbucket/bitbucket.api';
 import { QueryParam } from 'src/app/api/model/query-params.model';
-import { ApiSettingConstant } from 'src/app/api/setting/api-setting.constant';
-import { MatDialog } from '@angular/material';
+import { BitbucketSettingConstant } from 'src/app/api/setting/client/bitbucket/bitbucket-setting.constant';
+import { MatDialog, MatTableDataSource } from '@angular/material';
 import { CommitHistoryFilter } from '../commit-history/commit-history-filter-dialog/commit-history-filter.component';
 import { CommitHistoryFilteredModel } from '../commit-history/commit-history-filter-dialog/commit-history-filter.model';
-import { Observable, Subject } from 'rxjs';
+import { Observable, Subject, interval } from 'rxjs';
 import { DashBoardModel } from '../model/dashboard.model';
 import { CodeClientSettingsWizardComponent } from 'src/app/settings/wizard/codeclient-settings-wizard.component';
 import { CodeClientSetting } from 'src/app/settings/model/codeclient-setting.model';
 import { CommitHistoryFileData, CommitHistoryFile } from '../model/commit-history-file-data.model';
 import { CommitHistoryFileChangesDialog } from '../commit-history/commit-history-file-changes-dialog/commit-history-file-changes.component';
+import { ProfileSetting } from 'src/app/settings/model/profile-setting.model';
+import { CodeClientProfileSettingComponent } from 'src/app/settings/profile/codeclient-profile-setting.component';
+import { FileHistoryBean } from '../model/file-history.model';
 
 @Injectable({
     providedIn: 'root'
@@ -20,7 +23,9 @@ export class BitbucketService {
 
     private selectedDashBoardData: DashBoardModel;
 
-    constructor(private codeClientApi:CodeClientApi,
+    private selectedFileHistoryData: FileHistoryBean;
+
+    constructor(private bitbucketApi:BitbucketApi,
         public dialog: MatDialog){}
 
     getSelectedDashBoardData() {
@@ -31,48 +36,86 @@ export class BitbucketService {
         this.selectedDashBoardData = selectedDashBoardData;
     }
 
+    getSelectedFileHistoryData() {
+        return this.selectedFileHistoryData;
+    }   
+
+    setSelectedFileHistoryData(selectedFileHistoryData: FileHistoryBean) {
+        this.selectedFileHistoryData = selectedFileHistoryData;
+    }
+
     getRecentRepo() {
         let queryParams:QueryParam[]=[];
         let queryParam = new QueryParam();
-        queryParam.param = ApiSettingConstant.QUERY_PARAM_REPO_PERMISSION;
-        queryParam.value = ApiSettingConstant.QUERY_PARAM_REPO_PERMISSION_WRITE;
+        queryParam.param = BitbucketSettingConstant.QUERY_PARAM_REPO_PERMISSION;
+        queryParam.value = BitbucketSettingConstant.QUERY_PARAM_REPO_PERMISSION_WRITE;
         queryParams.push(queryParam);        
-        return this.codeClientApi.getRecentRepo(queryParams);
+        return this.bitbucketApi.getRecentRepo(queryParams);
     } 
     
     getSelectedRepoBranchNames(limit: string ) {
         let queryParams:QueryParam[] = this.buildProjectKeyRepoSlugParams();
         let queryParam = new QueryParam();
         queryParam = new QueryParam();
-        queryParam.param = ApiSettingConstant.QUERY_PARAM_OFFSET_LIMIT;
+        queryParam.param = BitbucketSettingConstant.QUERY_PARAM_OFFSET_LIMIT;
         queryParam.value = limit;
         queryParams.push(queryParam);
-        return this.codeClientApi.getSelectedRepoBranches(queryParams);
+        return this.bitbucketApi.getSelectedRepoBranches(queryParams);
     }
 
     getCommitHistory(branchName:string,start:string,limit:string,mergeSetting:string) {
         let queryParams:QueryParam[]  = this.buildProjectKeyRepoSlugParams();
         let queryParam = new QueryParam();
-        queryParam.param = ApiSettingConstant.QUERY_PARAM_BRANCH_NAME;
+        queryParam.param = BitbucketSettingConstant.QUERY_PARAM_BRANCH_NAME;
         queryParam.value = branchName;
         queryParams.push(queryParam);
         queryParam = new QueryParam();
-        queryParam.param = ApiSettingConstant.QUERY_PARAM_OFFSET_START;
+        queryParam.param = BitbucketSettingConstant.QUERY_PARAM_OFFSET_START;
         queryParam.value = start;
         queryParams.push(queryParam);
         queryParam = new QueryParam();
-        queryParam.param = ApiSettingConstant.QUERY_PARAM_MERGE_SETTING;
+        queryParam.param = BitbucketSettingConstant.QUERY_PARAM_MERGE_SETTING;
         queryParam.value = mergeSetting;
         queryParams.push(queryParam);
         queryParam = new QueryParam();
-        queryParam.param = ApiSettingConstant.QUERY_PARAM_OFFSET_LIMIT;
+        queryParam.param = BitbucketSettingConstant.QUERY_PARAM_OFFSET_LIMIT;
         queryParam.value = limit;
         queryParams.push(queryParam);
-        return this.codeClientApi.getCommitHistory(queryParams);
+        return this.bitbucketApi.getCommitHistory(queryParams);
     }
 
-    getCommitHistoryFileChanges(commitId:string) {
-        return this.codeClientApi.getCommitHistoryFileChanges(commitId);
+    getFileHistory(start:string,limit:string) {
+        let queryParams:QueryParam[]  = this.buildProjectKeyRepoSlugParams();
+        let queryParam = new QueryParam();
+        queryParam.param = BitbucketSettingConstant.QUERY_PARAM_FULL_SRC_PATH;
+        queryParam.value = this.selectedFileHistoryData.filePath;
+        queryParams.push(queryParam);
+        queryParam = new QueryParam();
+        queryParam.param = BitbucketSettingConstant.QUERY_PARAM_COMMIT_ID;
+        queryParam.value = this.selectedFileHistoryData.commitId;
+        queryParams.push(queryParam);
+        queryParam = new QueryParam();
+        queryParam.param = BitbucketSettingConstant.QUERY_PARAM_OFFSET_START;
+        queryParam.value = start;
+        queryParams.push(queryParam);
+        queryParam = new QueryParam();
+        queryParam.param = BitbucketSettingConstant.QUERY_PARAM_OFFSET_LIMIT;
+        queryParam.value = limit;
+        queryParams.push(queryParam);
+        return this.bitbucketApi.getFileHistory(queryParams);
+    }
+
+    getCommitHistoryFileChanges(commitId:string, limit:string) {
+        let queryParams:QueryParam[]  = this.buildProjectKeyRepoSlugParams();
+        let queryParam = new QueryParam();
+        queryParam.param = BitbucketSettingConstant.QUERY_PARAM_COMMIT_ID;
+        queryParam.value = commitId;
+        queryParams.push(queryParam);
+        queryParam = new QueryParam();
+        queryParam.param = BitbucketSettingConstant.QUERY_PARAM_OFFSET_LIMIT;
+        queryParam.value = limit;
+        queryParams.push(queryParam);
+        return this.bitbucketApi.getCommitHistoryFileChanges(queryParams);
     }
 
     openFilterDialog(displayedColumns:string[],tableData:CommitHistoryData[],commitHistoryFilteredModel:CommitHistoryFilteredModel): Observable<CommitHistoryFilteredModel> {
@@ -91,11 +134,11 @@ export class BitbucketService {
     private buildProjectKeyRepoSlugParams() {
         let queryParams:QueryParam[]=[];
         let queryParam = new QueryParam();
-        queryParam.param = ApiSettingConstant.QUERY_PARAM_PROJECT_KEY;
+        queryParam.param = BitbucketSettingConstant.QUERY_PARAM_PROJECT_KEY;
         queryParam.value = this.selectedDashBoardData.project_key;
         queryParams.push(queryParam);
         queryParam = new QueryParam();
-        queryParam.param = ApiSettingConstant.QUERY_PARAM_REPO_SLUG;
+        queryParam.param = BitbucketSettingConstant.QUERY_PARAM_REPO_SLUG;
         queryParam.value = this.selectedDashBoardData.repo_slug;
         queryParams.push(queryParam);
         return queryParams;
@@ -104,6 +147,16 @@ export class BitbucketService {
     openSettingsDialog(): Observable<CodeClientSetting> {
         const dialogRef = this.dialog.open(CodeClientSettingsWizardComponent, {
             width: '600px',
+            disableClose : true          
+        });
+        return dialogRef.afterClosed();
+    }
+
+    openProfileSettingDialog(): Observable<ProfileSetting> {
+        const dialogRef = this.dialog.open(CodeClientProfileSettingComponent, {
+            width: '600px',
+            height: '680px',
+            panelClass:['profile__dialog'],
             disableClose : true          
         });
         return dialogRef.afterClosed();
@@ -123,11 +176,32 @@ export class BitbucketService {
         });
     }
 
+
+    prepareFileChangesCommitIds(commitIds:string[], dataSource: MatTableDataSource<CommitHistoryData>) {
+        let notifier:Subject<boolean> = new Subject<boolean>();
+        dataSource.filteredData.reduce((p, i,index,filteredData) => p.then(() => this.filterCommitIdsForFileChanges(notifier,i,commitIds,index,filteredData)).then(() => this.wait(5)),
+                 Promise.resolve());
+       return notifier.asObservable();    
+    }
+
+    filterCommitIdsForFileChanges(notifier:Subject<boolean>, commitHistoryData: CommitHistoryData, commitIds:string[],index:number, filteredData:CommitHistoryData[]) {
+        if(commitHistoryData.checked){
+            commitIds.push(commitHistoryData.commitId);
+        }
+        if(filteredData.length-1===index) {
+            notifier.next(true);
+        }
+    }
+
+    wait(ms:number) : any {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
     loadCommitIdFileChanges(commitIds:string[]) {
         let commitHistoryFileDataSubject = new Subject<CommitHistoryFileData[]>();
         let commitHistoryFileChanges:CommitHistoryFileData[] = []
         commitIds.forEach((commitId,index)=>{
-            this.getCommitHistoryFileChanges(commitId).subscribe(response=>{
+            this.getCommitHistoryFileChanges(commitId,'1000').subscribe(response=>{
                 let commitHistoryFileChangesResp = response.body;
                 let commitHistoryFileData = new CommitHistoryFileData();
                 commitHistoryFileData.commitId = commitId;
@@ -161,5 +235,4 @@ export class BitbucketService {
         })
         return commitHistoryFileDataSubject.asObservable();
     }
-
 }

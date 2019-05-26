@@ -3,6 +3,7 @@ import { MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
 import { NgxFileNode, NgxFileExplorerBuilder } from '@salilvnair/ngx-file-explorer';
 import { CommitHistoryFileChangesModel, CommitHistoryFileChangesDataSource } from './commit-history-file-changes.model';
 import { ExcelUtil } from 'src/app/util/excel.util';
+import { MatHeaderProgressData } from 'src/app/util/mat-header-progress/mat-header-progress.data';
 
 @Component({
     selector:'commit-history-file-changes',
@@ -15,11 +16,15 @@ export class CommitHistoryFileChangesDialog implements OnInit{
     folderView = false;
     commitHistoryFileExplorerData: NgxFileNode;
     dataSource:CommitHistoryFileChangesDataSource[] = [];
+    expandAll = false;
+    collapseAll = false;
     constructor(
         public dialogRef: MatDialogRef<CommitHistoryFileChangesDialog>,
         private excelUtil: ExcelUtil,
+        private matHeaderProgressData:MatHeaderProgressData,
         @Inject(MAT_DIALOG_DATA) public data: CommitHistoryFileChangesModel
         ) {
+            this.matHeaderProgressData.setHidden(true);
     }
 
     ngOnInit(): void {
@@ -59,6 +64,24 @@ export class CommitHistoryFileChangesDialog implements OnInit{
                 }
             })
         })
+    }
+
+    expandAllNodes() {
+        this.collapseAll = false;
+        this.expandAll = true;
+    }
+    collapseAllNodes() {
+        this.expandAll = false;
+        this.collapseAll = true;
+    }
+
+    switchView(viewName: string) {
+        if(viewName==='table') {
+            this.folderView = false;
+        }
+        else {
+            this.folderView = true;
+        }
     }
 
     onClickClose() {

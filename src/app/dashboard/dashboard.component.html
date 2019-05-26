@@ -1,12 +1,19 @@
-<ng-container *ngFor="let dashBoardData of dataSource">
-    <mat-card (click)="loadCommitHistory(dashBoardData)" class="repo__container" [ngClass]="{'repo_private':!dashBoardData.public,'repo_public':dashBoardData.public}">
-        <mat-card-header  class="subtext__container">
-                <mat-card-subtitle class="subtext">{{dashBoardData.project_key}}</mat-card-subtitle>
-        </mat-card-header>    
-        <mat-card-content>
-            <div class="repotext">
-                    {{dashBoardData.repo_name}}
-            </div>        
-        </mat-card-content>
-    </mat-card>
-</ng-container>
+
+    <div class="repo__container">
+        <ng-container *ngFor="let dashBoardData of dataSource">
+            <mat-card (click)="loadCommitHistory(dashBoardData)" class="repo-tile__container" [ngClass]="{'repo_private':!dashBoardData.public,'repo_public':dashBoardData.public}">
+                <mat-card-header  class="subtext__container">
+                        <mat-card-subtitle class="subtext">{{dashBoardData.project_key}}</mat-card-subtitle>
+                </mat-card-header>    
+                <mat-card-content>
+                    <div class="repotext">
+                            {{dashBoardData.repo_name}}
+                    </div>        
+                </mat-card-content>
+            </mat-card>
+        </ng-container>
+    </div>
+
+
+
+

@@ -1,18 +1,23 @@
 .config__container {
-    margin: 20px;
     display: flex;
     flex-direction: column;
     max-width: 600px;
-    margin-left: 30%;
-    margin-top: 8%;
+    overflow: auto;
+    max-height:560px;
+}
+
+.bitbucket__profile {
+    display: flex;
+    flex-direction: column;
 }
 
 .config__btns {
+    margin-top:10px;
     display: flex;
     justify-content: flex-end;
 }
 
-.config__btns #config {
+.config__btns #load {
     margin:10px;
 }
 

@@ -1,5 +1,6 @@
 import { Database } from '@salilvnair/ngpa';
-import { DashBoardModel } from 'src/app/client/bitbucket/model/dashboard.model';
+import { ApiProviderSetting } from './api-provider.model';
+//import { DashBoardModel } from 'src/app/client/bitbucket/model/dashboard.model';
 
 @Database("setting")
 export class CodeClientSetting {

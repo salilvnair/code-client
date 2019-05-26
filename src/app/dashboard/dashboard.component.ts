@@ -54,9 +54,23 @@ export class DashboardComponent implements OnInit {
     }
 
     init() {
-        let codeClientSetting: CodeClientSetting = this.codeClientSettingsService.loadSetting();
-        if(codeClientSetting && codeClientSetting.bearerToken) {
-            this.loadRecentRepo();
+        let codeClientSetting = this.codeClientSettingsService.loadSetting();
+        let profileSetting = this.codeClientSettingsService.loadProfileSetting();
+        if(codeClientSetting && 
+            codeClientSetting.bearerToken
+            ) {
+            if(!profileSetting || !profileSetting.profile ||
+                !profileSetting.apiProviderSetting ||
+                !profileSetting.apiProviderSetting.apiPrefixUrl) {
+                this.bitbucketService.openProfileSettingDialog().subscribe(data=>{
+                    if(data.profile) {
+                        this.loadRecentRepo();
+                    }
+                })
+            }
+            else {
+                this.loadRecentRepo();
+            }
         }
         else {
             this.showSettingsDialog();
@@ -65,8 +79,22 @@ export class DashboardComponent implements OnInit {
 
     showSettingsDialog() {        
         this.bitbucketService.openSettingsDialog().subscribe(codeClientSetting=>{
-            if(codeClientSetting && codeClientSetting.bearerToken) {
-                this.loadRecentRepo();
+            let profileSetting = this.codeClientSettingsService.loadProfileSetting();
+            if(codeClientSetting && 
+                codeClientSetting.bearerToken
+                ) {
+                if(!profileSetting || !profileSetting.profile ||
+                    !profileSetting.apiProviderSetting ||
+                    !profileSetting.apiProviderSetting.apiPrefixUrl) {
+                    this.bitbucketService.openProfileSettingDialog().subscribe(data=>{
+                        if(data.profile) {
+                            this.loadRecentRepo();
+                        }
+                    })
+                }
+                else {
+                    this.loadRecentRepo();
+                }
             }
         })
     }

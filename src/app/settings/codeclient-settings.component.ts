@@ -3,6 +3,7 @@ import { CodeClientSettingService } from './service/codeclient-settings.service'
 import { CodeClientSetting } from './model/codeclient-setting.model';
 import { MatHeaderProgressData } from '../util/mat-header-progress/mat-header-progress.data';
 import { Router } from '@angular/router';
+import { BitbucketService } from '../client/bitbucket/service/bitbucket.service';
 
 @Component({
   selector: 'codeclient-settings',
@@ -12,15 +13,37 @@ import { Router } from '@angular/router';
 export class CodeClientSettingsComponent implements OnInit {
     constructor(
         private codeClientSettingsService: CodeClientSettingService,
+        private bitbucketService: BitbucketService,
         private matHeaderProgressData:MatHeaderProgressData,
         private router: Router
         ) {}
     bearerToken:string;
     tokenChanged:boolean = false;
     codeClientSetting: CodeClientSetting;
+    apiProviders = [
+      {
+        name:'Bitbucket',
+        value:'bitbucket',
+        apiPrefixUrl:'https://api.bitbucket.org',
+        disabled:false
+      },
+      {
+        name:'Github',
+        value:'github',
+        apiPrefixUrl:'https://api.github.com',
+        disabled:true
+      },
+      {
+        name:'GitLab',
+        value:'gitlab',
+        apiPrefixUrl:'https://gitlab.com/api',
+        disabled:true
+      }
+    ]
+    selectedProvider = this.apiProviders[0];
 
     ngOnInit() {
-      this.codeClientSetting = this.codeClientSettingsService.loadSetting();
+      this.codeClientSetting = this.codeClientSettingsService.loadSetting();    
       this.bearerToken = this.codeClientSetting.bearerToken
     }
 
@@ -50,5 +73,14 @@ export class CodeClientSettingsComponent implements OnInit {
         }
       }
       this.router.navigate(["dashboard"]);
+    }
+
+    closeConfig() {
+      this.router.navigate(["dashboard"]);
+    }
+
+    viewProfiles() {
+      this.bitbucketService.openProfileSettingDialog().subscribe(()=>{
+      })
     }
 }

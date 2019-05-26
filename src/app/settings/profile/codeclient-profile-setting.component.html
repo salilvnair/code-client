@@ -1,0 +1,50 @@
+<div class="config__container">
+    <mat-form-field appearance="outline" required>
+        <mat-label>Provider </mat-label>       
+        <mat-select placeholder="Provider" [(value)]="selectedProvider">
+            <mat-option [disabled]="apiProvider.disabled"  
+                        [value]="apiProvider" 
+                        *ngFor="let apiProvider of apiProviders">
+                <mat-svg-icon  
+                    [disabled]="apiProvider.disabled"                     
+                    [title]="apiProvider.name"
+                    [icon]="apiProvider.value">
+                </mat-svg-icon>{{apiProvider.name}}
+            </mat-option> 
+        </mat-select>           
+        <mat-svg-icon 
+            matSuffix 
+            [title]="selectedProvider.name"
+            [icon]="selectedProvider.value">
+        </mat-svg-icon> 
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+        <mat-label>Api Prefix URL</mat-label>
+        <input matInput [(ngModel)]="selectedProvider.apiPrefixUrl" (change)="dirtyCheck()"  #apiPrefixInput="ngModel" 
+            placeholder="Api Prefix URL" required>
+        <mat-error *ngIf="apiPrefixInput.hasError('required')">Api prefix url cannot be empty!</mat-error>
+        <mat-svg-icon 
+            matSuffix 
+            title="Api Prefix URL"
+            icon="api">
+        </mat-svg-icon>        
+    </mat-form-field>
+    <div class="bitbucket__profile" *ngIf="profileSetting.profile=='bitbucket'">
+        <mat-form-field appearance="outline" *ngFor="let contextURL of profileSetting.contextURLs">
+            <mat-label>{{contextURL.displayName}}</mat-label>
+            <input matInput  [(ngModel)]="contextURL.url" (change)="dirtyCheck()"
+                [placeholder]="contextURL.displayName" required>
+            <mat-svg-icon *ngIf="contextURL.icon"
+                matSuffix 
+                [title]="contextURL.displayName"
+                [icon]="contextURL.icon">
+            </mat-svg-icon>
+        </mat-form-field>
+    </div> 
+</div>
+<div class="config__btns">
+    <button id="load" mat-raised-button color="accent" (click)="fileUpload.click()">Import Profile</button>
+    <input class="hide" #fileUpload type="file" (click)="fileUpload.value = null"(change)="importProfile($event)" accept="application/json,.json">
+    <button *ngIf="valuesChanged || !dbProfileSetting" [disabled]="!valuesChanged" id="save" mat-raised-button color="primary" (click)="saveProfile()">Save</button>
+    <button *ngIf="!valuesChanged && dbProfileSetting" id="close" mat-raised-button color="warn" (click)="closeProfile()">Close</button>
+</div>  

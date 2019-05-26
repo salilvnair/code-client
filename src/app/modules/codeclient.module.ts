@@ -21,6 +21,8 @@ import { HeaderComponent } from '../header/header.component';
 import { CodeClientSettingsComponent } from '../settings/codeclient-settings.component';
 import { CodeClientSettingsWizardComponent } from '../settings/wizard/codeclient-settings-wizard.component';
 import { CommitHistoryFileChangesDialog } from '../client/bitbucket/commit-history/commit-history-file-changes-dialog/commit-history-file-changes.component';
+import { CodeClientProfileSettingComponent } from '../settings/profile/codeclient-profile-setting.component';
+import { FileHistoryComponent } from '../client/bitbucket/file-history/file-history.component';
 
 
 const HTTP_INTERCEPTOR_PROVIDER_ARRAY = [
@@ -40,6 +42,7 @@ const MAT_CUSTOM_DATE_FORMAT_PROVIDER = [
 
 const COMPONENT_DECLARATION_EXPORT_ARRAY  = [
     CommitHistoryComponent,
+    FileHistoryComponent,
     DashboardComponent,
     HeaderComponent,
     CodeClientSettingsComponent
@@ -48,7 +51,8 @@ const COMPONENT_DECLARATION_EXPORT_ARRAY  = [
 const COMPONENT_DECLARATION_ENTRYPOINT_ARRAY = [
     CommitHistoryFilter,
     CodeClientSettingsWizardComponent,
-    CommitHistoryFileChangesDialog
+    CommitHistoryFileChangesDialog,
+    CodeClientProfileSettingComponent
 ]
 
 const UTILITY_DECLATION_EXPORT_ARRAY = [

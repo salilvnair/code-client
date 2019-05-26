@@ -10,10 +10,11 @@ import { MatHeaderProgressData } from 'src/app/util/mat-header-progress/mat-head
 import { CommitHistoryFilteredModel } from './commit-history-filter-dialog/commit-history-filter.model';
 import { DateUtil } from 'src/app/util/date.util';
 import { FormControl } from '@angular/forms';
-import { ReplaySubject, Subject } from 'rxjs';
+import { ReplaySubject, Subject, Subscription } from 'rxjs';
 import { takeUntil, take } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { ExcelUtil } from 'src/app/util/excel.util';
+import { FileHistoryBean } from '../model/file-history.model';
 
 @Component({
     selector:'commit-history',
@@ -28,7 +29,7 @@ import { ExcelUtil } from 'src/app/util/excel.util';
           state("expanded", style({ height: "*" })),
           transition(
             "expanded <=> collapsed",
-            animate("225ms cubic-bezier(0.4, 0.0, 0.2, 1)")
+            animate("425ms cubic-bezier(0.4, 0.0, 0.2, 1)")
           )
         ])
       ]
@@ -45,6 +46,7 @@ export class CommitHistoryComponent implements OnInit, AfterViewInit, OnDestroy 
     expandedElement: CommitHistoryFileData | null;
     @ViewChild(MatPaginator) paginator: MatPaginator;
     @ViewChild(MatSort) sort: MatSort;
+    @ViewChildren(MatCheckbox) checkboxes:MatCheckbox[];
     displayedColumns: string[] = ['select','author', 'commitId', 'commitMessage', 'date'];
     showSearchBox = false;
     showToolBarBtns = true;
@@ -57,21 +59,24 @@ export class CommitHistoryComponent implements OnInit, AfterViewInit, OnDestroy 
     commitHistoryResponse:CommitHistoryResponse;
     commitHistoryFilteredModel: CommitHistoryFilteredModel;
     selectedBranchName:string  = 'master';
-    selectedMergeSetting = 'include';
+    selectedMergeSetting = 'exclude';
     repoBranches: string[];
     disableShowFileChanges = true;
-    /** control for the selected bank */
-    public bankCtrl: FormControl = new FormControl();
+    isCommitHistoryExpanded = false;
+    /** control for the selected branchNames */
+    public branchNameCtrl: FormControl = new FormControl();
 
     /** control for the MatSelect filter keyword */
-    public bankFilterCtrl: FormControl = new FormControl();
+    public branchNameFilterCtrl: FormControl = new FormControl();
 
 
-      /** list of banks filtered by search keyword */
-    public filteredBanks: ReplaySubject<string[]> = new ReplaySubject<string[]>(1);
+      /** list of branchNames filtered by search keyword */
+    public filteredBranchNames: ReplaySubject<string[]> = new ReplaySubject<string[]>(1);
 
     /** Subject that emits when the component has been destroyed. */
     protected _onDestroy = new Subject<void>();
+
+    private commitIdsFileChangesSubscription = new Subscription();
 
     @ViewChild('branchSelect') branchSelect: MatSelect;
 
@@ -121,16 +126,16 @@ export class CommitHistoryComponent implements OnInit, AfterViewInit, OnDestroy 
                     return branchNameData.displayId;
                 })
                 // set initial selection
-                this.bankCtrl.setValue('master');
+                this.branchNameCtrl.setValue('master');
 
                 // load the initial bank list
-                this.filteredBanks.next(this.repoBranches.slice());
+                this.filteredBranchNames.next(this.repoBranches.slice());
 
                 // listen for search field value changes
-                this.bankFilterCtrl.valueChanges
+                this.branchNameFilterCtrl.valueChanges
                 .pipe(takeUntil(this._onDestroy))
                 .subscribe(() => {
-                    this.filterBanks();
+                    this.filterBranchNames();
                 });
                 this.initCommitHistoryTableDataSource();                
             })
@@ -145,13 +150,14 @@ export class CommitHistoryComponent implements OnInit, AfterViewInit, OnDestroy 
         this.changeHeaderTitle(true);
         this._onDestroy.next();
         this._onDestroy.complete();
+        this.commitIdsFileChangesSubscription.unsubscribe();
     }
 
     /**
    * Sets the initial value after the filteredBanks are loaded initially
    */
     protected setInitialValue() {
-        this.filteredBanks
+        this.filteredBranchNames
         .pipe(take(1), takeUntil(this._onDestroy))
         .subscribe(() => {
             // setting the compareWith property to a comparison function
@@ -163,21 +169,21 @@ export class CommitHistoryComponent implements OnInit, AfterViewInit, OnDestroy 
         });
     }
 
-    protected filterBanks() {
+    protected filterBranchNames() {
         if (!this.repoBranches) {
             return;
         }
         // get the search keyword
-        let search = this.bankFilterCtrl.value;
+        let search = this.branchNameFilterCtrl.value;
         if (!search) {
-            this.filteredBanks.next(this.repoBranches.slice());
+            this.filteredBranchNames.next(this.repoBranches.slice());
             return;
         } 
         else {
             search = search.toLowerCase();
         }
-        // filter the banks
-        this.filteredBanks.next(
+        // filter the branch names
+        this.filteredBranchNames.next(
         this.repoBranches.filter(bank => bank.toLowerCase().indexOf(search) > -1)
         );
     }
@@ -195,7 +201,7 @@ export class CommitHistoryComponent implements OnInit, AfterViewInit, OnDestroy 
     }
 
     getCommitHistoryFileChanges(commitId:string) {       
-        this.bitbucketService.getCommitHistoryFileChanges(commitId).subscribe(response=>{
+        this.bitbucketService.getCommitHistoryFileChanges(commitId,'1000').subscribe(response=>{
             let commitHistoryFileChanges = response.body;
             let expandedElement = new CommitHistoryFileData();
             expandedElement.commitId = commitId;
@@ -224,6 +230,7 @@ export class CommitHistoryComponent implements OnInit, AfterViewInit, OnDestroy 
             ////console.log(expandedElement);
             this.expandedElement = expandedElement;
         })
+        return true;
     }
 
     loadCommitHistory(branchName:string,start:string,limit:string) {
@@ -450,30 +457,41 @@ export class CommitHistoryComponent implements OnInit, AfterViewInit, OnDestroy 
     }
 
     onSelectAllCommits(event:MatCheckboxChange) {
-        this.onSelectCommit(event);
+        this.disableShowFileChanges = true;
         this.dataSource.filteredData.forEach(commitLog=>{
             commitLog.checked = event.checked;
         });
+        if(event.checked){
+            this.onSelectCommit(event);
+        }
     }
 
     onSelectCommit(event:MatCheckboxChange){
-        if(event.checked){
-            this.disableShowFileChanges = false;
-        }
-        else{
-            this.disableShowFileChanges = true;
-        }
+        this.disableShowFileChanges = true;
+        this.checkboxes.forEach(checkbox=>{
+            if(checkbox.checked) {
+                this.disableShowFileChanges = false;
+            }
+        })
     }
 
     openShowFileChangesDialog() {
         let commitIds = [];
-        this.dataSource.filteredData.forEach(data=>{
-            if(data.checked){
-                commitIds.push(data.commitId);
+        this.matHeaderProgressData.setHidden(false);
+        this.commitIdsFileChangesSubscription = this.bitbucketService.prepareFileChangesCommitIds(commitIds, this.dataSource).subscribe(notify=>{
+            if(notify){
+                this.bitbucketService.openShowFileChangesDialog(commitIds,this.selectedBranchName);
             }
-        })
-        //console.log(commitIds);
-        this.bitbucketService.openShowFileChangesDialog(commitIds,this.selectedBranchName);
+        });        
+    }
+
+    showFileHistory(commitId:string,filePath:string) {
+        let selectedFileHistory:FileHistoryBean = new FileHistoryBean();
+        selectedFileHistory.branchName = this.selectedBranchName;
+        selectedFileHistory.commitId = commitId;
+        selectedFileHistory.filePath = filePath;
+        this.bitbucketService.setSelectedFileHistoryData(selectedFileHistory);
+        this.router.navigate(["file-history"]);
     }
 
 }

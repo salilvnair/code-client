@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { CodeClientSetting } from '../model/codeclient-setting.model';
-import { CodeClientSettingsRepository } from '../repo/codeclient-settings.repository';
 import { CodeClientSettingsDataService } from './codeclient-data-settings.service';
+import { ProfileSetting } from '../model/profile-setting.model';
 
 @Injectable({
     providedIn:'root'
@@ -20,6 +20,18 @@ export class CodeClientSettingService {
 
     loadSetting(): CodeClientSetting {
         return this.codeClientSettingsDataService.selectCodeClientSettings();
+    }
+
+    saveProfileSetting(profileSetting:ProfileSetting): Promise<ProfileSetting> {
+        return this.codeClientSettingsDataService.saveCodeClientProfileSetting(profileSetting);
+    }
+
+    updateProfileSetting(oldCodeClientSetting:ProfileSetting, newCodeClientSetting:ProfileSetting): Promise<ProfileSetting> {
+        return this.codeClientSettingsDataService.updateCodeClientProfileSetting(oldCodeClientSetting, newCodeClientSetting);
+    }
+
+    loadProfileSetting(): ProfileSetting {
+        return this.codeClientSettingsDataService.selectCodeClientProfileSetting();
     }
 
 }

@@ -1,13 +1,13 @@
 <div class="config__container">
     <mat-form-field appearance="outline">
-        <mat-label>Bearer Token</mat-label>
+        <mat-label>Personal Access Token</mat-label>
         <input matInput [(ngModel)]="bearerToken" (change)="dirtyCheck()"  #tokenInput="ngModel" 
-            placeholder="Enter Bearer Token" required>
-        <mat-error *ngIf="tokenInput.hasError('required')">Token cannot be empty!</mat-error>
+            placeholder="Enter Personal Access Token" required>
+        <mat-error *ngIf="tokenInput.hasError('required')">Personal Access Token cannot be empty!</mat-error>
         <mat-svg-icon 
             matSuffix 
-            title="Bearer Token"
-            icon="key">
+            title="Personal Access Token"
+            icon="access_key">
         </mat-svg-icon>
         <mat-hint>Goto Account >> Personal access tokens and create a new token</mat-hint>
     </mat-form-field>
@@ -23,6 +23,8 @@
     </mat-form-field>
     
     <div class="config__btns">
-        <button mat-raised-button color="primary"  [disabled]="tokenInput.errors" (click)="saveConfig()">Save</button>
+        <button id="config" mat-raised-button color="accent"  (click)="viewProfiles()">View Profiles</button>  
+        <button *ngIf="!tokenChanged" id="close" mat-raised-button color="warn"  [disabled]="tokenInput.errors" (click)="closeConfig()">Close</button>
+        <button *ngIf="tokenChanged" id="save" mat-raised-button color="primary"  [disabled]="tokenInput.errors" (click)="saveConfig()">Save</button>
     </div>   
 </div>

@@ -1,9 +1,15 @@
-.repo__container {
-    min-width: 150px;
+.repo__container{
+    margin-left:40px;
+    margin-right:40px;
+}
+.repo-tile__container {
+    min-width: 180px;
     min-height: 150px;
     margin: 10px 15px;
     display: inline-block;
     vertical-align: top;
+    max-width: 180px;
+    text-align: center;
 }
 
 .repo_private {
@@ -23,7 +29,7 @@
     background-color: #57D9A3;
 }
   
-.repo__container:hover {
+.repo-tile__container:hover {
     -webkit-box-shadow: 0px 4px 10px 4px rgba(0, 0, 0, 0.4);
     -moz-box-shadow: 0px 4px 10px 4px rgba(0, 0, 0, 0.4);
     box-shadow: 0px 4px 10px 4px rgba(0, 0, 0, 0.4);
@@ -37,13 +43,14 @@
 }
 
 .repotext {
-    font-size: large;
+    font-size: 16px;
     font-weight: bolder;
     color: white;
     display: flex;
     justify-content: center;
-    word-wrap: break-word;
-    padding-top:100px;
+    word-break: break-word;
+    padding-top: 110px;
+    font-family: monospace;
 }
   
 .subtext__container {
@@ -54,6 +61,7 @@
 
 .subtext {
     font-size: smaller;
+    font-family: monospace;
     color: white;
     margin: 0px !important;
 }

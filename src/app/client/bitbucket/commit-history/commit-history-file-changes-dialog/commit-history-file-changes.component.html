@@ -2,22 +2,25 @@
     <div class="header-filter">
         <div class="searchbar__container">              
             <div class="toolbar__btns">
-                <mat-svg-icon  
+                <mat-svg-icon  *ngIf="folderView"
+                    class="margin-20LR"
                     title="Switch To Table View" 
                     icon="table_view" 
                     [disabled]="!dataSource?.length>0"
                     button="true"
                     (onClickEvent)="switchView('table')">
                 </mat-svg-icon>  
-                <mat-svg-icon  
+                <mat-svg-icon  *ngIf="!folderView"
                     title="Switch To Folder View" 
+                    class="margin-20LR"
                     icon="folder_view" 
                     [disabled]="!dataSource?.length>0"
                     button="true"
                     (onClickEvent)="switchView('folder')">
                 </mat-svg-icon>  
-                <mat-svg-icon  
+                <mat-svg-icon *ngIf="!folderView"
                     title="Export To Excel" 
+                    class="margin-20LR"
                     icon="xls_glossy" 
                     [disabled]="!dataSource?.length>0"
                     button="true"
@@ -59,19 +62,21 @@
     <div class="foler__view" *ngIf="folderView">
         <div class="file-explorer-toolbar">
             <mat-svg-icon  
-                title="Expand All" 
-                icon="folder_open" 
-                [disabled]="!dataSource?.length>0"
-                button="true"
-                (onClickEvent)="switchView('folder')">
-            </mat-svg-icon>
-            <mat-svg-icon  
                 title="Collapse All" 
                 icon="folder_close" 
+                transform="scale(0.8)"
                 [disabled]="!dataSource?.length>0"
                 button="true"
-                (onClickEvent)="switchView('folder')">
+                (onClickEvent)="collapseAllNodes()">
             </mat-svg-icon>  
+            <mat-svg-icon  
+                title="Expand All" 
+                icon="folder_open" 
+                transform="scale(0.8)"
+                [disabled]="!dataSource?.length>0"
+                button="true"
+                (onClickEvent)="expandAllNodes()">
+            </mat-svg-icon>
         </div>
         <ngx-file-explorer 
             [root]="commitHistoryFileExplorerData"

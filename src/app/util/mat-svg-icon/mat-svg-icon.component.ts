@@ -208,6 +208,69 @@ export class MatSvgIconComponent implements OnInit {
         "assets/icon/folder_close.svg"
       )
     );
+
+    this.matIconRegistry.addSvgIcon(
+      "bitbucket",
+      this.domSanitizer.bypassSecurityTrustResourceUrl(
+        "assets/icon/bitbucket.svg"
+      )
+    );
+
+    this.matIconRegistry.addSvgIcon(
+      "github",
+      this.domSanitizer.bypassSecurityTrustResourceUrl(
+        "assets/icon/github.svg"
+      )
+    );
+
+    this.matIconRegistry.addSvgIcon(
+      "gitlab",
+      this.domSanitizer.bypassSecurityTrustResourceUrl(
+        "assets/icon/gitlab.svg"
+      )
+    );
+
+    this.matIconRegistry.addSvgIcon(
+      "api",
+      this.domSanitizer.bypassSecurityTrustResourceUrl(
+        "assets/icon/api.svg"
+      )
+    );
+
+    this.matIconRegistry.addSvgIcon(
+      "access_key",
+      this.domSanitizer.bypassSecurityTrustResourceUrl(
+        "assets/icon/access_key.svg"
+      )
+    );
+
+    this.matIconRegistry.addSvgIcon(
+      "config",
+      this.domSanitizer.bypassSecurityTrustResourceUrl(
+        "assets/icon/config.svg"
+      )
+    );
+
+    this.matIconRegistry.addSvgIcon(
+      "gear",
+      this.domSanitizer.bypassSecurityTrustResourceUrl(
+        "assets/icon/gear.svg"
+      )
+    );
+
+    this.matIconRegistry.addSvgIcon(
+      "commit",
+      this.domSanitizer.bypassSecurityTrustResourceUrl(
+        "assets/icon/commit.svg"
+      )
+    );
+
+    this.matIconRegistry.addSvgIcon(
+      "raw_file",
+      this.domSanitizer.bypassSecurityTrustResourceUrl(
+        "assets/icon/raw_file.svg"
+      )
+    );
   }
   @Input("icon") icon: string;
   @Input("transform") transform: string;
