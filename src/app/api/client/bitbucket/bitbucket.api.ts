@@ -57,4 +57,12 @@ export class BitbucketApi  extends CodeClientBaseApi {
       queryParam);
     return this.http.get<CommitHistoryFileResponse>(endpointUrl,{observe:'response'});
   }
+
+  getRawFileFromCommitId(queryParam?:QueryParam[]) {
+    let endpointUrl = this.prepareEndpointURLWithQueryParam(
+      this.bitbucketSettingService.getApiPrefix(),
+      this.bitbucketSettingService.getRawFileEndpointURL(),
+      queryParam);
+    return this.http.get(endpointUrl,{responseType:'text'});
+  }
 }

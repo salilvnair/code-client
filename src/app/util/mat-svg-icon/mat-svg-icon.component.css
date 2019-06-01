@@ -3,4 +3,5 @@
     -webkit-filter:grayscale(100%); /* Chrome 19+, Safari 6+, Safari 6+ iOS */
     -moz-filter: grayscale(100%);
     -o-filter: grayscale(100%);
+    cursor: not-allowed;
 }

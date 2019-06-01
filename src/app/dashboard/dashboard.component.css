@@ -1,14 +1,14 @@
 .repo__container{
-    margin-left:40px;
+    margin-left:130px;
     margin-right:40px;
 }
 .repo-tile__container {
-    min-width: 180px;
-    min-height: 150px;
+    min-width: 190px;
+    min-height: 160px;
     margin: 10px 15px;
     display: inline-block;
     vertical-align: top;
-    max-width: 180px;
+    max-width: 190px;
     text-align: center;
 }
 

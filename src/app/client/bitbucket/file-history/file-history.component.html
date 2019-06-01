@@ -1,4 +1,4 @@
-<div class="mat-elevation-z8 commit-history">
+<div class="mat-elevation-z8 file-history" *ngIf="!showFileDiff">
     <div class="header-filter">
         <div class="searchbar__container">
             <div class="branch-filter">
@@ -65,8 +65,7 @@
                           mat-button 
                           mat-icon-button
                           (click)="closeSearchBox()"
-                          >
-                              <mat-icon>close</mat-icon>
+                          ><mat-icon>close</mat-icon>
                       </button>
                   </div>                  
                 </ng-container>                
@@ -98,6 +97,14 @@
                       [disabled]="!dataSource.data?.length>0 || fileHistoryResponse && fileHistoryResponse.isLastPage"
                       (onClickEvent)="fetchAllFileHistory()"
                       ></mat-svg-icon>
+                    <mat-svg-icon
+                      title="Compare" 
+                      icon="compare" 
+                      class="filter__icon"
+                      [disabled]="comparableCommits?.length < 2 || !dataSource.data?.length>0"
+                      button="true"
+                      (onClickEvent)="onCompare()"
+                    ></mat-svg-icon>  
                   </ng-container>          
                     <mat-svg-icon  
                         title="Export To Excel" 
@@ -124,62 +131,79 @@
         <ng-container matColumnDef="{{ column }}"
             *ngFor="let column of displayedColumns"
             >
-            <ng-container *ngIf="column== 'select'; else other_ths">
-                <th mat-header-cell *matHeaderCellDef>
-                  <mat-checkbox #selectAllCommitCheckBox
-                      id="selecteAll"
-                      color="accent"
-                      (change)="onSelectAllCommits($event)"
-                  >
-                  </mat-checkbox>                 
-                </th>
+            <ng-container *ngIf="column == 'select'; else other_ths">
+                    <th mat-header-cell *matHeaderCellDef> &nbsp; </th>  
             </ng-container>
             <ng-template #other_ths>
-              <th mat-header-cell *matHeaderCellDef>
-                  {{ column | titlecase }}
-              </th>
+                <th mat-header-cell *matHeaderCellDef>
+                    {{ column | titlecase }}
+                </th>   
             </ng-template>
-                <ng-container *ngIf="column == 'select'; else other_than_select">
-                    <td mat-cell *matCellDef="let element">
-                      <mat-checkbox
-                        [name]="column" 
-                        [id]="element[column]" 
-                        color="primary"
-                        (ngModelChange)="element['checked']= $event ? true : false"
-                        (change)="onSelectCommit($event)"
-                        [ngModel]="element['checked']"
-                      ></mat-checkbox>
-                    </td>
+            <ng-container *ngIf="column == 'select'; else other_than_select">
+                <td mat-cell *matCellDef="let element">
+                    <mat-checkbox
+                    [name]="column" 
+                    [id]="element[column]" 
+                    color="primary"
+                    (ngModelChange)="element['checked']= $event ? true : false"
+                    (change)="compareTwoCommits($event, element[column])"
+                    [disabled]="disableOtherHashId(element[column])"
+                    [ngModel]="element['checked']"
+                    ></mat-checkbox>
+                </td>
+            </ng-container>
+            <ng-template #other_than_select>
+                <td mat-cell *matCellDef="let element">
+                <ng-container *ngIf="column == 'commitId'; else other_column">
+                    <div class="hash__container">
+                        <span class="clipboard-icon__container">
+                        <mat-svg-icon
+                            class="clipboard-icon"
+                            icon="clipboard"
+                            button="true"
+                            [copy-to-clipboard]="element[column]"
+                            haltOtherEvents="true"
+                        ></mat-svg-icon>
+                        </span>
+                        <span class="hashid__container">{{ element[column] }}</span>
+                    </div>
                 </ng-container>
-                <ng-template #other_than_select>
-                    <td mat-cell *matCellDef="let element">
-                    <ng-container *ngIf="column == 'commitId'; else other_column">
-                        <div class="hash__container">
-                            <span class="clipboard-icon__container">
-                            <mat-svg-icon
-                                class="clipboard-icon"
-                                icon="clipboard"
-                                button="true"
-                                [copy-to-clipboard]="element[column]"
-                                haltOtherEvents="true"
-                            ></mat-svg-icon>
-                            </span>
-                            <span class="hashid__container">{{ element[column] }}</span>
-                        </div>
-                    </ng-container>
-                    <ng-template #other_column> {{ element[column] }} </ng-template>
-                    </td>
-                </ng-template>            
+                <ng-template #other_column> {{ element[column] }} </ng-template>
+                </td>
+            </ng-template>            
         </ng-container>
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr 
-            mat-row *matRowDef="let element; columns: displayedColumns;"
+        <tr mat-row *matRowDef="let element; columns: displayedColumns;"
             class="example-element-row"></tr>
     </table>
+    <button
+        *ngIf="comparableCommits?.length >= 2"
+        mat-icon-button
+        color="primary"
+        (click)="onCompare()"
+        [ngStyle]="{
+          position: 'fixed',
+          left: getCompareButtonLeftPosition(),
+          top: getCompareButtonTopPosition()
+        }"
+      >
+        <mat-svg-icon              
+            title="Compare"
+            icon="compare">
+        </mat-svg-icon>
+      </button>
     <mat-paginator 
         [pageSizeOptions]="[5, 10, 20, 50, 100]" 
         showFirstLastButtons
         (page)="getNext($event)"
         ></mat-paginator>
 </div>
-  
+
+<div class="file-diff" *ngIf="showFileDiff">
+    <button mat-raised-button color="primary" (click)="closeFileDiff()">Back</button>
+    <ngx-diff 
+        [diffFiles]="diffFiles"
+        [context]="context" 
+        [outputFormat]="outputFormat">
+    </ngx-diff>
+</div>

@@ -7,6 +7,7 @@ import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { DateAdapter, MAT_DATE_FORMATS } from '@angular/material';
 import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 import { NgxFileExplorerModule } from '@salilvnair/ngx-file-explorer';
+import { NgxDiffModule } from '@salilvnair/ngx-diff';
 import { CommitHistoryComponent } from '../client/bitbucket/commit-history/commit-history.component';
 import { HttpAuthInterceptor } from '../api/interceptor/http-auth.interceptor';
 import { MaterialModule } from './material.module';
@@ -68,7 +69,8 @@ const UTILITIY_IMPORT_EXPORT_ARRAY = [
     MaterialModule,
     FlexLayoutModule,
     NgxMatSelectSearchModule,
-    NgxFileExplorerModule
+    NgxFileExplorerModule,
+    NgxDiffModule
 ]
 
 const ANGULAR_CORE_IMPORT_EXPORT_ARRAY = [

@@ -2,7 +2,7 @@
     width: 100%;
   }
 
-  .commit-history{
+  .file-history{
       margin:20px;
   }
 
@@ -211,7 +211,7 @@
   .file-path__input {
     margin-right:10px;
     margin-top:10px;
-    width: 980px;
+    width: 940px;
   }
 
   .filter__icon{

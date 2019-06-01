@@ -6,7 +6,7 @@ import { BitbucketSettingConstant } from 'src/app/api/setting/client/bitbucket/b
 import { MatDialog, MatTableDataSource } from '@angular/material';
 import { CommitHistoryFilter } from '../commit-history/commit-history-filter-dialog/commit-history-filter.component';
 import { CommitHistoryFilteredModel } from '../commit-history/commit-history-filter-dialog/commit-history-filter.model';
-import { Observable, Subject, interval } from 'rxjs';
+import { Observable, Subject, interval, BehaviorSubject } from 'rxjs';
 import { DashBoardModel } from '../model/dashboard.model';
 import { CodeClientSettingsWizardComponent } from 'src/app/settings/wizard/codeclient-settings-wizard.component';
 import { CodeClientSetting } from 'src/app/settings/model/codeclient-setting.model';
@@ -14,7 +14,7 @@ import { CommitHistoryFileData, CommitHistoryFile } from '../model/commit-histor
 import { CommitHistoryFileChangesDialog } from '../commit-history/commit-history-file-changes-dialog/commit-history-file-changes.component';
 import { ProfileSetting } from 'src/app/settings/model/profile-setting.model';
 import { CodeClientProfileSettingComponent } from 'src/app/settings/profile/codeclient-profile-setting.component';
-import { FileHistoryBean } from '../model/file-history.model';
+import { FileHistoryBean, FileHistoryCompareBean } from '../model/file-history.model';
 
 @Injectable({
     providedIn: 'root'
@@ -25,12 +25,18 @@ export class BitbucketService {
 
     private selectedFileHistoryData: FileHistoryBean;
 
+    private fileHistoryCompareData: FileHistoryCompareBean[];
+
     constructor(private bitbucketApi:BitbucketApi,
         public dialog: MatDialog){}
 
+    getFileHistoryCompareData() {
+        return this.fileHistoryCompareData;
+    } 
+    
     getSelectedDashBoardData() {
         return this.selectedDashBoardData;
-    }   
+    }
 
     setSelectedDashBoardData(selectedDashBoardData: DashBoardModel) {
         this.selectedDashBoardData = selectedDashBoardData;
@@ -234,5 +240,32 @@ export class BitbucketService {
             })
         })
         return commitHistoryFileDataSubject.asObservable();
+    }
+
+    getRawFileFromCommitIds(commitIds: string[], filePath: string) {
+        let fileCompareDataNotifier = new BehaviorSubject<boolean>(false);
+        this.fileHistoryCompareData = [];
+        commitIds.forEach(commitId => {
+            let queryParams:QueryParam[]  = this.buildProjectKeyRepoSlugParams();
+            let queryParam = new QueryParam();
+            queryParam.param = BitbucketSettingConstant.QUERY_PARAM_COMMIT_ID;
+            queryParam.value = commitId;
+            queryParams.push(queryParam);
+            queryParam = new QueryParam();
+            queryParam.param = BitbucketSettingConstant.QUERY_PARAM_FULL_SRC_PATH;
+            queryParam.value = filePath;
+            queryParams.push(queryParam);
+            this.bitbucketApi.getRawFileFromCommitId(queryParams).subscribe(response=>{
+                let fileString = response;
+                let fileHistoryCompareBean = new FileHistoryCompareBean();
+                fileHistoryCompareBean.commitId = commitId;
+                fileHistoryCompareBean.fileString = fileString;
+                this.fileHistoryCompareData.push(fileHistoryCompareBean);
+                if(this.fileHistoryCompareData.length === commitIds.length) {
+                    fileCompareDataNotifier.next(true);
+                }
+            })
+        })
+        return fileCompareDataNotifier;
     }
 }

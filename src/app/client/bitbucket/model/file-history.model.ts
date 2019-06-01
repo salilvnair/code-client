@@ -17,3 +17,8 @@ export class FileHistoryBean {
     filePath: string;
     branchName: string;
 }
+
+export class FileHistoryCompareBean {
+    commitId: string;
+    fileString: string;
+}

@@ -11,6 +11,7 @@ import { ExcelUtil } from 'src/app/util/excel.util';
 import { FileHistoryData } from '../model/file-history.model';
 import { FileHistoryResponse } from 'src/app/api/rest/model/file-history.response';
 import { CommitHistoryFilteredModel } from '../commit-history/commit-history-filter-dialog/commit-history-filter.model';
+import { NgxDiffFile } from '@salilvnair/ngx-diff';
 
 @Component({
     selector:'file-history',
@@ -48,6 +49,16 @@ export class FileHistoryComponent implements OnInit, AfterViewInit, OnDestroy  {
 
     @ViewChild('branchSelect') branchSelect: MatSelect;
 
+    comparableCommits: string[];
+    comparableCommitsPosition: DOMRect[];
+    compareButtonTopPosition: string;
+    compareButtonLeftPosition: string;
+
+    context = 5;
+    outputFormat = 'side-by-side';
+    diffFiles = [];
+    showFileDiff = false;
+
     ngOnInit(){
         this.init();
     }
@@ -79,8 +90,11 @@ export class FileHistoryComponent implements OnInit, AfterViewInit, OnDestroy  {
     }
 
     initFileHistoryTableDataSource() {
-        this.selectedBranchName = this.bitbucketService.getSelectedFileHistoryData().branchName;
-        this.selectedFilePath = this.bitbucketService.getSelectedFileHistoryData().filePath;
+        if(this.bitbucketService.getSelectedFileHistoryData()){
+            this.selectedBranchName = this.bitbucketService.getSelectedFileHistoryData().branchName;
+            this.selectedFilePath = this.bitbucketService.getSelectedFileHistoryData().filePath;
+        }        
+        
         this.loadFileHistory('0','25');
         this.applyFilterPredicate();
     }
@@ -319,16 +333,107 @@ export class FileHistoryComponent implements OnInit, AfterViewInit, OnDestroy  {
         } 
     }
 
-    onSelectAllCommits(event:MatCheckboxChange) {
-        this.dataSource.filteredData.forEach(commitLog=>{
-            commitLog.checked = event.checked;
-        });
-        if(event.checked){
-            this.onSelectCommit(event);
+
+    compareTwoCommits(event: MatCheckboxChange, commitId: string) {
+        let domRect: DOMRect = event.source._elementRef.nativeElement.getBoundingClientRect();
+        this.compareButtonTopPosition = null;
+        this.compareButtonLeftPosition = null;
+        if (!this.comparableCommits) {
+            this.comparableCommits = [];
+            this.comparableCommitsPosition = [];
+            if (event.checked) {
+            this.comparableCommits.push(commitId);
+            this.comparableCommitsPosition.push(domRect);
+            }
+        } 
+        else {
+            if (this.comparableCommits.length <= 2) {
+                if (event.checked) {
+                    this.comparableCommits.push(commitId);
+                    this.comparableCommitsPosition.push(domRect);
+                } else {
+                    this.comparableCommits = this.comparableCommits.filter(
+                    item => item !== commitId
+                    );
+                    this.comparableCommitsPosition = this.comparableCommitsPosition.filter(
+                    item => item.y !== domRect.y
+                    );
+                }
+            }
+        }
+    }
+    disableOtherHashId(commitId) {
+        if (this.comparableCommits && this.comparableCommits.length >= 2) {
+            if (this.comparableCommits.indexOf(commitId) > -1) {
+            return false;
+            }
+            return true;
+        }
+        return false;
+    }
+    
+    calculateCompareButtonTopPosition(rect1: DOMRect, rect2: DOMRect) {
+      let finalTopPosition = 0;
+      if (rect1.y > rect2.y) {
+        finalTopPosition = (rect1.y - rect2.y) / 2 - 10;
+        finalTopPosition = finalTopPosition + rect2.y;
+      } else {
+        finalTopPosition = (rect2.y - rect1.y) / 2 - 10;
+        finalTopPosition = finalTopPosition + rect1.y;
+      }
+      finalTopPosition = Math.floor(finalTopPosition);
+      return finalTopPosition + "px";
+    }
+    
+    calculateCompareButtonLeftPosition(rect1: DOMRect) {
+       let finalLeftPosition = Math.floor(rect1.x) - 12;
+       return finalLeftPosition + "px";
+    }
+    
+    getCompareButtonTopPosition() {
+        if (!this.compareButtonTopPosition) {
+            this.compareButtonTopPosition = this.calculateCompareButtonTopPosition(
+                this.comparableCommitsPosition[0],
+                this.comparableCommitsPosition[1]
+            );
+        }
+        return this.compareButtonTopPosition;
+    }
+
+    getCompareButtonLeftPosition() {
+        if (!this.compareButtonLeftPosition) {
+            this.compareButtonLeftPosition = this.calculateCompareButtonLeftPosition(
+             this.comparableCommitsPosition[0]
+            );
+        }
+        return this.compareButtonLeftPosition;
+    }
+
+    onCompare() {
+        if(this.selectedFilePath) {
+            this.matHeaderProgressData.setHidden(false);
+            this.bitbucketService.getRawFileFromCommitIds(
+                this.comparableCommits,
+                this.selectedFilePath
+            ).subscribe(fetched=>{
+                if(fetched) {
+                    this.matHeaderProgressData.setHidden(true);
+                    let diffData = this.bitbucketService.getFileHistoryCompareData();
+                    let ngxDiffFiles = [];
+                    let ngxDiffFile = new NgxDiffFile();
+                    ngxDiffFile.fileName = this.selectedFilePath.replace(/^.*[\\\/]/, '');;
+                    ngxDiffFile.oldFileContent = diffData[1].fileString;
+                    ngxDiffFile.newFileContent = diffData[0].fileString;
+                    ngxDiffFiles.push(ngxDiffFile);
+                    this.diffFiles = ngxDiffFiles;
+                    this.showFileDiff = true;                   
+                }
+            })
         }
     }
 
-    onSelectCommit(event:MatCheckboxChange){
 
+    closeFileDiff() {
+        this.showFileDiff = false;
     }
 }

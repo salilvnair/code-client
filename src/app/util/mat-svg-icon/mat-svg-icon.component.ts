@@ -271,6 +271,35 @@ export class MatSvgIconComponent implements OnInit {
         "assets/icon/raw_file.svg"
       )
     );
+
+    this.matIconRegistry.addSvgIcon(
+      "compare",
+      this.domSanitizer.bypassSecurityTrustResourceUrl(
+        "assets/icon/compare.svg"
+      )
+    );
+
+    this.matIconRegistry.addSvgIcon(
+      "changes",
+      this.domSanitizer.bypassSecurityTrustResourceUrl(
+        "assets/icon/changes.svg"
+      )
+    );
+
+    this.matIconRegistry.addSvgIcon(
+      "change",
+      this.domSanitizer.bypassSecurityTrustResourceUrl(
+        "assets/icon/change.svg"
+      )
+    );
+
+    this.matIconRegistry.addSvgIcon(
+      "file_changes",
+      this.domSanitizer.bypassSecurityTrustResourceUrl(
+        "assets/icon/file_changes.svg"
+      )
+    );
+
   }
   @Input("icon") icon: string;
   @Input("transform") transform: string;
