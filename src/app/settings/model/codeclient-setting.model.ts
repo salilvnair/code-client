@@ -6,5 +6,6 @@ import { ApiProviderSetting } from './api-provider.model';
 export class CodeClientSetting {
     app:string ='codeclient';
     bearerToken: string;
+    autoCheckUpdates:boolean = true;
     //defaultRepo: DashBoardModel;    
 }

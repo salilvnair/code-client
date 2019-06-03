@@ -5,6 +5,7 @@ export class CommitHistoryData {
     commitId: string;
     commitMessage: string;
     date: string;
+    parentCommitId:string;
 }
 
 export class CommitHistory {

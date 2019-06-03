@@ -26,14 +26,14 @@ export class BitbucketService {
     private selectedFileHistoryData: FileHistoryBean;
 
     private fileHistoryCompareData: FileHistoryCompareBean[];
-
+    
     constructor(private bitbucketApi:BitbucketApi,
         public dialog: MatDialog){}
 
     getFileHistoryCompareData() {
         return this.fileHistoryCompareData;
     } 
-    
+
     getSelectedDashBoardData() {
         return this.selectedDashBoardData;
     }
@@ -260,6 +260,7 @@ export class BitbucketService {
                 let fileHistoryCompareBean = new FileHistoryCompareBean();
                 fileHistoryCompareBean.commitId = commitId;
                 fileHistoryCompareBean.fileString = fileString;
+                fileHistoryCompareBean.filePath = filePath;
                 this.fileHistoryCompareData.push(fileHistoryCompareBean);
                 if(this.fileHistoryCompareData.length === commitIds.length) {
                     fileCompareDataNotifier.next(true);
@@ -267,5 +268,34 @@ export class BitbucketService {
             })
         })
         return fileCompareDataNotifier;
+    }
+
+    getRawFileCommiDetailsFromCommitIds(commitIds: string[], filePath: string) {
+        let fileDetailDataNotifier = new Subject<FileHistoryCompareBean[]>();
+        let fileHistoryDetailData = [];
+        commitIds.forEach(commitId => {
+            let queryParams:QueryParam[]  = this.buildProjectKeyRepoSlugParams();
+            let queryParam = new QueryParam();
+            queryParam.param = BitbucketSettingConstant.QUERY_PARAM_COMMIT_ID;
+            queryParam.value = commitId;
+            queryParams.push(queryParam);
+            queryParam = new QueryParam();
+            queryParam.param = BitbucketSettingConstant.QUERY_PARAM_FULL_SRC_PATH;
+            queryParam.value = filePath;
+            queryParams.push(queryParam);
+            this.bitbucketApi.getRawFileFromCommitId(queryParams).subscribe(response=>{
+                let fileString = response;
+                let fileHistoryCompareBean = new FileHistoryCompareBean();
+                fileHistoryCompareBean.commitId = commitId;
+                fileHistoryCompareBean.fileString = fileString;
+                fileHistoryCompareBean.filePath = filePath;
+                fileHistoryDetailData.push(fileHistoryCompareBean);
+                if(fileHistoryDetailData.length === commitIds.length) {
+                    let fileDetailData = fileHistoryDetailData;
+                    fileDetailDataNotifier.next(fileDetailData);
+                }
+            })
+        })
+        return fileDetailDataNotifier;
     }
 }

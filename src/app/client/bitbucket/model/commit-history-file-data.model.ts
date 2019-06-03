@@ -1,5 +1,6 @@
 export class CommitHistoryFileData {
     commitId: string;
+    parentCommitId: string;
     commitedFiles: CommitHistoryFile[];
 }
 

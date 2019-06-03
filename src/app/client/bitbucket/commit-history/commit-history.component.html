@@ -1,4 +1,4 @@
-<div class="mat-elevation-z8 commit-history">
+<div class="mat-elevation-z8 commit-history" *ngIf="!showFileDiff">
     <div class="header-filter">
         <div class="searchbar__container">
             <div class="branch-filter">
@@ -87,8 +87,8 @@
                           placeholder="Column"
                           [(value)]="lovSelected">
                             <mat-option value="all">All</mat-option> 
-                            <ng-container *ngFor="let displayedColumn of displayedColumns">
-                                <mat-option [value]="displayedColumn">{{displayedColumn | titlecase}}</mat-option> 
+                            <ng-container *ngFor="let filterColumn of filterColumns">
+                                <mat-option [value]="filterColumn">{{filterColumn | titlecase}}</mat-option> 
                             </ng-container>                                        
                         </mat-select>
                       </mat-form-field>
@@ -269,6 +269,7 @@
         <tr 
             mat-row *matRowDef="let element; columns: displayedColumns;"
             class="example-element-row"
+            (contextmenu)="commitDetailsContextMenu.open($event,{ commit: element} )"
             (click)="isCommitHistoryExpanded = !isCommitHistoryExpanded && getCommitHistoryFileChanges(element.commitId)"
         ></tr>
         <tr
@@ -284,4 +285,26 @@
         (page)="getNext($event)"
         ></mat-paginator>
 </div>
+<mat-svg-icon 
+    class="mrg__left-10"
+    *ngIf="showFileDiff"
+    (onClickEvent)="closeCommitHistoryDetails()"  
+    button="true"          
+    title="Go Back"
+    icon="return">
+</mat-svg-icon>
+<div class="mrg__left-20" *ngIf="showFileDiff">    
+    <ngx-diff 
+        [diffFiles]="diffFiles"
+        [context]="context" 
+        [outputFormat]="outputFormat">
+    </ngx-diff>
+</div>
+<mat-context-menu [matMenuTriggerFor]="commitDetails" #commitDetailsContextMenu>
+    <mat-menu #commitDetails>
+      <ng-template matMenuContent let-commit="commit">
+          <button mat-menu-item (click)="showCommitDetails(commit)">View Commit Changes</button>
+      </ng-template>
+    </mat-menu>
+</mat-context-menu>
   

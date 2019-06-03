@@ -1,4 +1,12 @@
-<div class="mat-elevation-z8 file-history" *ngIf="!showFileDiff">
+<mat-svg-icon 
+    class="mrg__left-10"
+    *ngIf="!showFileDiff"
+    (onClickEvent)="closeFileHistory()"  
+    button="true"          
+    title="Go Back"
+    icon="return">
+</mat-svg-icon>
+<div class="mat-elevation-z8 file-history" *ngIf="!showFileDiff">    
     <div class="header-filter">
         <div class="searchbar__container">
             <div class="branch-filter">
@@ -53,8 +61,8 @@
                           placeholder="Column"
                           [(value)]="lovSelected">
                             <mat-option value="all">All</mat-option> 
-                            <ng-container *ngFor="let displayedColumn of displayedColumns">
-                                <mat-option [value]="displayedColumn">{{displayedColumn | titlecase}}</mat-option> 
+                            <ng-container *ngFor="let filterColumn of filterColumns">
+                                <mat-option [value]="filterColumn">{{filterColumn | titlecase}}</mat-option> 
                             </ng-container>                                        
                         </mat-select>
                       </mat-form-field>
@@ -101,7 +109,7 @@
                       title="Compare" 
                       icon="compare" 
                       class="filter__icon"
-                      [disabled]="comparableCommits?.length < 2 || !dataSource.data?.length>0"
+                      [disabled]="comparableCommits?.length < 2 || !dataSource.data?.length>0 || disableFileDiffOnExtensions()"
                       button="true"
                       (onClickEvent)="onCompare()"
                     ></mat-svg-icon>  
@@ -132,7 +140,16 @@
             *ngFor="let column of displayedColumns"
             >
             <ng-container *ngIf="column == 'select'; else other_ths">
-                    <th mat-header-cell *matHeaderCellDef> &nbsp; </th>  
+                    <th mat-header-cell *matHeaderCellDef style="padding-left: 30px !important;">
+                        <mat-svg-icon  
+                            [disabled]="comparableCommits?.length < 2 || disableFileDiffOnExtensions()"
+                            (onClickEvent)="onCompare()"  
+                            button="true"         
+                            title="Compare"
+                            icon="compare">
+                        </mat-svg-icon>
+                        &nbsp;&nbsp;&nbsp;&nbsp;
+                    </th>  
             </ng-container>
             <ng-template #other_ths>
                 <th mat-header-cell *matHeaderCellDef>
@@ -175,32 +192,22 @@
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let element; columns: displayedColumns;"
             class="example-element-row"></tr>
-    </table>
-    <button
-        *ngIf="comparableCommits?.length >= 2"
-        mat-icon-button
-        color="primary"
-        (click)="onCompare()"
-        [ngStyle]="{
-          position: 'fixed',
-          left: getCompareButtonLeftPosition(),
-          top: getCompareButtonTopPosition()
-        }"
-      >
-        <mat-svg-icon              
-            title="Compare"
-            icon="compare">
-        </mat-svg-icon>
-      </button>
+    </table>    
     <mat-paginator 
         [pageSizeOptions]="[5, 10, 20, 50, 100]" 
         showFirstLastButtons
         (page)="getNext($event)"
         ></mat-paginator>
 </div>
-
-<div class="file-diff" *ngIf="showFileDiff">
-    <button mat-raised-button color="primary" (click)="closeFileDiff()">Back</button>
+<mat-svg-icon 
+    class="mrg__left-10"
+    *ngIf="showFileDiff"
+    (onClickEvent)="closeFileDiff()"  
+    button="true"          
+    title="Go Back"
+    icon="return">
+</mat-svg-icon>
+<div class="file-diff mrg__left-20" *ngIf="showFileDiff">    
     <ngx-diff 
         [diffFiles]="diffFiles"
         [context]="context" 

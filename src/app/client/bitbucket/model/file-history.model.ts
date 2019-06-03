@@ -4,6 +4,7 @@ export class FileHistoryData {
     author: string;
     commitId: string;
     commitMessage: string;
+    parentCommitId:string;
     date: string;
 }
 
@@ -21,4 +22,5 @@ export class FileHistoryBean {
 export class FileHistoryCompareBean {
     commitId: string;
     fileString: string;
+    filePath?: string;
 }

@@ -49,6 +49,7 @@ export class DashboardComponent implements OnInit {
     }
 
     loadCommitHistory(dashBoardModel:DashBoardModel) {
+        this.bitbucketService.setSelectedFileHistoryData(null);
         this.bitbucketService.setSelectedDashBoardData(dashBoardModel);
         this.router.navigate(["commit-history"]);
     }

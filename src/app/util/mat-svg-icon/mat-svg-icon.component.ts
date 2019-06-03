@@ -300,6 +300,13 @@ export class MatSvgIconComponent implements OnInit {
       )
     );
 
+    this.matIconRegistry.addSvgIcon(
+      "return",
+      this.domSanitizer.bypassSecurityTrustResourceUrl(
+        "assets/icon/return.svg"
+      )
+    );
+
   }
   @Input("icon") icon: string;
   @Input("transform") transform: string;

@@ -28,3 +28,11 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
     display: none;
 }
 
+.mrg__left-20 {
+    margin-left: 20px;
+}
+
+.mrg__left-10 {
+margin-left: 10px;
+}
+

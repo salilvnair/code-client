@@ -1,5 +1,8 @@
 <ng-container *ngIf="button; else is_icon">
-  <button [title]="title" mat-icon-button [disabled]="disabled" color="primary" (click)="onClick($event)">
+  <button
+    matRipple
+    matRippleCentered="true" 
+    [title]="title" mat-icon-button [disabled]="disabled" color="primary" (click)="onClick($event)">
     <ng-container *ngIf="badge; else not_badge">
         <mat-icon [ngStyle]="{'transform':'transform'}" [matBadgeColor]="badgeColor" [matBadgePosition]="badgePosition" [matBadge]="badgeCount"  [color]="color" [ngClass]="{'disabled':disabled}" [svgIcon]="icon"></mat-icon>
     </ng-container>

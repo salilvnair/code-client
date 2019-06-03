@@ -54,7 +54,8 @@ const IMPORT_EXPORT_MAT_MODULE_ARRAY = [
   MatTabsModule,
   MatCheckboxModule,
   MatBadgeModule,
-  MatChipsModule
+  MatChipsModule,
+  MatMenuModule
 ];
 
 @NgModule({

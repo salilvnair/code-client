@@ -27,6 +27,8 @@
     "@fortawesome/fontawesome-svg-core": "^1.2.18",
     "@fortawesome/free-brands-svg-icons": "^5.8.2",
     "@fortawesome/free-solid-svg-icons": "^5.8.2",
+    "@ngxeu/core": "^1.0.0",
+    "@ngxeu/notifier": "0.0.3",
     "@salilvnair/ngpa": "^1.0.4",
     "@salilvnair/ngx-diff": "0.0.3",
     "@salilvnair/ngx-file-explorer": "0.0.1",

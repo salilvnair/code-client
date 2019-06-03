@@ -20,6 +20,7 @@ export class CodeClientSettingsComponent implements OnInit {
     bearerToken:string;
     tokenChanged:boolean = false;
     codeClientSetting: CodeClientSetting;
+    autoCheckUpdates:boolean = true;
     apiProviders = [
       {
         name:'Bitbucket',
@@ -45,6 +46,7 @@ export class CodeClientSettingsComponent implements OnInit {
     ngOnInit() {
       this.codeClientSetting = this.codeClientSettingsService.loadSetting();    
       this.bearerToken = this.codeClientSetting.bearerToken
+      this.autoCheckUpdates = this.codeClientSetting.autoCheckUpdates;
     }
 
     dirtyCheck() {
@@ -54,6 +56,7 @@ export class CodeClientSettingsComponent implements OnInit {
     saveConfig() {
       let codeClientSetting: CodeClientSetting = new CodeClientSetting();
       codeClientSetting.bearerToken = this.bearerToken;
+      codeClientSetting.autoCheckUpdates = this.autoCheckUpdates;
       this.matHeaderProgressData.setHidden(false);
       if(this.tokenChanged){
         this.codeClientSettingsService.updateSetting(this.codeClientSetting,codeClientSetting).then(()=>{

@@ -1,7 +1,7 @@
 import { OnInit, Component, AfterViewInit, ViewChild, OnDestroy, QueryList, ViewChildren } from '@angular/core';
 import { BitbucketService } from '../service/bitbucket.service';
 import { CommitHistoryData } from '../model/commit-history.model';
-import { MatTableDataSource, MatPaginator, MatSort, PageEvent, MatSelect, MatCheckbox, MatCheckboxChange } from '@angular/material';
+import { MatTableDataSource, MatPaginator, MatSort, PageEvent, MatSelect, MatCheckbox, MatCheckboxChange, MatMenuTrigger } from '@angular/material';
 import * as dateFormat from 'dateformat';
 import { trigger, state, style, transition, animate } from '@angular/animations';
 import { CommitHistoryFileData, CommitHistoryFile } from '../model/commit-history-file-data.model';
@@ -15,6 +15,7 @@ import { takeUntil, take } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { ExcelUtil } from 'src/app/util/excel.util';
 import { FileHistoryBean } from '../model/file-history.model';
+import { NgxDiffFile } from '@salilvnair/ngx-diff';
 
 @Component({
     selector:'commit-history',
@@ -47,6 +48,7 @@ export class CommitHistoryComponent implements OnInit, AfterViewInit, OnDestroy 
     @ViewChild(MatPaginator) paginator: MatPaginator;
     @ViewChild(MatSort) sort: MatSort;
     @ViewChildren(MatCheckbox) checkboxes:MatCheckbox[];
+    @ViewChild(MatMenuTrigger) public menuTrigger : MatMenuTrigger;
     displayedColumns: string[] = ['select','author', 'commitId', 'commitMessage', 'date'];
     showSearchBox = false;
     showToolBarBtns = true;
@@ -80,6 +82,11 @@ export class CommitHistoryComponent implements OnInit, AfterViewInit, OnDestroy 
 
     @ViewChild('branchSelect') branchSelect: MatSelect;
 
+    context = 5;
+    outputFormat = 'side-by-side';
+    diffFiles = [];
+    showFileDiff = false;
+
     ngOnInit(){
         this.init();
     }
@@ -87,7 +94,14 @@ export class CommitHistoryComponent implements OnInit, AfterViewInit, OnDestroy 
     init() {
         this.redirectToDashBoardCheck();
         this.changeHeaderTitle(false);
-        this.loadSelectedRepoBranchNames();
+        this.loadSelectedRepoBranchNames();        
+    }
+
+    loadDataOnJumpBackFromFileHistory() {
+        if(this.bitbucketService.getSelectedFileHistoryData()){
+            this.selectedBranchName = this.bitbucketService.getSelectedFileHistoryData().branchName;            
+            this.branchNameCtrl.setValue(this.selectedBranchName); 
+        }         
     }
 
     redirectToDashBoardCheck() {
@@ -128,7 +142,7 @@ export class CommitHistoryComponent implements OnInit, AfterViewInit, OnDestroy 
                 // set initial selection
                 this.branchNameCtrl.setValue('master');
 
-                // load the initial bank list
+                // load the initial branchname list
                 this.filteredBranchNames.next(this.repoBranches.slice());
 
                 // listen for search field value changes
@@ -137,6 +151,7 @@ export class CommitHistoryComponent implements OnInit, AfterViewInit, OnDestroy 
                 .subscribe(() => {
                     this.filterBranchNames();
                 });
+                this.loadDataOnJumpBackFromFileHistory();
                 this.initCommitHistoryTableDataSource();                
             })
         }
@@ -239,13 +254,21 @@ export class CommitHistoryComponent implements OnInit, AfterViewInit, OnDestroy 
             this.matHeaderProgressData.setHidden(true);
             let responseBody = response.body;
             this.commitHistoryResponse = responseBody;
-            let commitHistoryDataSource= responseBody.values.map(({id,displayId,message,author,authorTimestamp})=>{
+            let commitHistoryDataSource= responseBody.values.map(({id,displayId,message,author,authorTimestamp,parents})=>{
                 let date = new Date(authorTimestamp); 
                 let commitHistoryData = new CommitHistoryData();
                 commitHistoryData.select = displayId;
                 commitHistoryData.author = author.displayName?author.displayName:author.name;
                 commitHistoryData.commitId = displayId;
                 commitHistoryData.commitMessage = message;
+                if(parents.length>1) {
+                    //its a merge commit and 1st index is the real commit
+                    //handle a true false boolean based on which disable the context menu
+                }
+                else if(parents.length==1) {
+                    //show context menu with commit details
+                    commitHistoryData.parentCommitId  = parents[0].displayId;
+                }
                 commitHistoryData.date = dateFormat(date,'dd/mm/yyyy hh:mm:ss');
                 return commitHistoryData;
             })
@@ -492,6 +515,64 @@ export class CommitHistoryComponent implements OnInit, AfterViewInit, OnDestroy 
         selectedFileHistory.filePath = filePath;
         this.bitbucketService.setSelectedFileHistoryData(selectedFileHistory);
         this.router.navigate(["file-history"]);
+    }
+
+    showCommitDetails(commitHistoryData: CommitHistoryData) {
+        this.prepareCommitDetails(commitHistoryData);
+    }
+
+    prepareCommitDetails(commitHistoryData: CommitHistoryData) {
+        this.matHeaderProgressData.setHidden(false);
+        this.bitbucketService.getCommitHistoryFileChanges(commitHistoryData.commitId,'1000').subscribe(response=>{
+            let commitHistoryFileChanges = response.body;
+            let commitDetailData = new CommitHistoryFileData();
+            commitDetailData.commitId = commitHistoryData.commitId;
+            commitDetailData.parentCommitId = commitHistoryData.parentCommitId;
+            commitDetailData.commitedFiles = commitHistoryFileChanges.values.map((value)=>{
+                let commitHistoryFile = new CommitHistoryFile();
+                commitHistoryFile.fileName = value.path.toString;
+                commitHistoryFile.fileStatus = value.type;               
+                return commitHistoryFile;
+            });
+            this.prepareDiffFromCommitDetails(commitDetailData);
+        })
+    }
+
+    prepareDiffFromCommitDetails(commitHistoryFileData:CommitHistoryFileData) {
+        this.diffFiles = [];
+        commitHistoryFileData.commitedFiles.forEach(commitFile=>{
+                let comparableCommits = [];
+                let fileName = commitFile.fileName;
+                comparableCommits.push(commitHistoryFileData.commitId);
+                if(commitFile.fileStatus!='ADD' && commitFile.fileStatus!='COPY') {
+                    comparableCommits.push(commitHistoryFileData.parentCommitId);
+                }
+                this.matHeaderProgressData.setHidden(false);
+                this.bitbucketService.getRawFileCommiDetailsFromCommitIds(
+                    comparableCommits,
+                    fileName
+                ).subscribe(fileHistoryDetailData=>{
+                    let diffData = fileHistoryDetailData;
+                    let ngxDiffFile = new NgxDiffFile();
+                    ngxDiffFile.fileName = fileName.replace(/^.*[\\\/]/, '');
+                    if(commitFile.fileStatus==='ADD' || commitFile.fileStatus==='COPY') {
+                        ngxDiffFile.oldFileContent = '';
+                    }
+                    else {
+                        ngxDiffFile.oldFileContent = diffData[1].fileString;
+                    }
+                    ngxDiffFile.newFileContent = diffData[0].fileString;
+                    this.diffFiles.push(ngxDiffFile);   
+                    if(this.diffFiles.length === commitHistoryFileData.commitedFiles.length ) {
+                        this.showFileDiff = true;
+                        this.matHeaderProgressData.setHidden(true);
+                    }
+                })                         
+        })         
+    }
+
+    closeCommitHistoryDetails() {
+        this.showFileDiff = false;
     }
 
 }

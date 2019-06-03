@@ -12,6 +12,7 @@ import { FileHistoryData } from '../model/file-history.model';
 import { FileHistoryResponse } from 'src/app/api/rest/model/file-history.response';
 import { CommitHistoryFilteredModel } from '../commit-history/commit-history-filter-dialog/commit-history-filter.model';
 import { NgxDiffFile } from '@salilvnair/ngx-diff';
+import { CommonUtility } from 'src/app/util/common/common.util';
 
 @Component({
     selector:'file-history',
@@ -30,6 +31,7 @@ export class FileHistoryComponent implements OnInit, AfterViewInit, OnDestroy  {
     @ViewChild(MatSort) sort: MatSort;
     @ViewChildren(MatCheckbox) checkboxes:MatCheckbox[];
     displayedColumns: string[] = ['select','author', 'commitId', 'commitMessage', 'date'];
+    filterColumns: string[] = ['author', 'commitId', 'commitMessage', 'date'];
     showSearchBox = false;
     showToolBarBtns = true;
     lovSelected = "all";
@@ -432,8 +434,20 @@ export class FileHistoryComponent implements OnInit, AfterViewInit, OnDestroy  {
         }
     }
 
-
     closeFileDiff() {
         this.showFileDiff = false;
+    }
+
+    closeFileHistory() {
+        this.router.navigate(["commit-history"]);
+    }
+
+    disableFileDiffOnExtensions() {
+        let nonComparableExtensions = ['jar','xls','xlsx','zip'];
+        let fileExtention = CommonUtility.getFileExtension(this.selectedFilePath);
+        if (nonComparableExtensions.indexOf(fileExtention.toLowerCase()) > -1) {
+            return true;
+        }
+        return false;
     }
 }

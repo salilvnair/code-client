@@ -24,6 +24,9 @@ import { CodeClientSettingsWizardComponent } from '../settings/wizard/codeclient
 import { CommitHistoryFileChangesDialog } from '../client/bitbucket/commit-history/commit-history-file-changes-dialog/commit-history-file-changes.component';
 import { CodeClientProfileSettingComponent } from '../settings/profile/codeclient-profile-setting.component';
 import { FileHistoryComponent } from '../client/bitbucket/file-history/file-history.component';
+import { NotifierModule } from '@ngxeu/notifier';
+import { NgxElectronUpdaterModule } from '@ngxeu/core';
+import { MatContextMenuComponent } from '../util/mat-context-menu/mat-context-menu.component';
 
 
 const HTTP_INTERCEPTOR_PROVIDER_ARRAY = [
@@ -62,7 +65,8 @@ const UTILITY_DECLATION_EXPORT_ARRAY = [
 
 const UTIL_DIRECTIVE_DECLARATION_EXPORT_ARRAY = [
     CopyToClipboard,
-    MatSvgIconComponent
+    MatSvgIconComponent,
+    MatContextMenuComponent
   ];
 
 const UTILITIY_IMPORT_EXPORT_ARRAY = [
@@ -70,7 +74,9 @@ const UTILITIY_IMPORT_EXPORT_ARRAY = [
     FlexLayoutModule,
     NgxMatSelectSearchModule,
     NgxFileExplorerModule,
-    NgxDiffModule
+    NgxDiffModule,
+    NgxElectronUpdaterModule,
+    NotifierModule
 ]
 
 const ANGULAR_CORE_IMPORT_EXPORT_ARRAY = [

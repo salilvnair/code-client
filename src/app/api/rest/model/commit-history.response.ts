@@ -16,7 +16,7 @@ export class CommitHistoryValue {
     committer: Author;
     committerTimestamp: number;
     message:string;
-    parents:Parent;
+    parents:Parent[];
 }
 
 export class Author {

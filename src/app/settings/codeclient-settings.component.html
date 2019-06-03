@@ -21,6 +21,18 @@
             icon="repository">
         </mat-svg-icon>
     </mat-form-field>
+
+    <mat-form-field appearance="outline">
+        <mat-label>Autocheck Updates</mat-label>        
+        <input disabled matInput placeholder="Check for updates automatically">
+        <mat-slide-toggle
+            style="display: table-caption;"
+            matSuffix
+            (change)="autoCheckUpdates == true? false : true;dirtyCheck();"
+            [checked]="autoCheckUpdates"
+            color="primary">
+        </mat-slide-toggle>
+    </mat-form-field>
     
     <div class="config__btns">
         <button id="config" mat-raised-button color="accent"  (click)="viewProfiles()">View Profiles</button>  

@@ -1,3 +1,4 @@
 .main__body {
     margin-top: 60px;
+    overflow-y: -webkit-paged-x;
 }
