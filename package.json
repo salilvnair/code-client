@@ -1,6 +1,6 @@
 {
   "name": "code-client",
-  "version": "0.0.0",
+  "version": "1.0.0-rc.1",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -8,7 +8,8 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "electron": "./node_modules/.bin/electron . --dev"
+    "electron": "./node_modules/.bin/electron . --dev",
+    "ngxeu-build": "ng build --prod"
   },
   "private": true,
   "dependencies": {
@@ -31,7 +32,7 @@
     "@ngxeu/notifier": "0.0.3",
     "@salilvnair/ngpa": "^1.0.4",
     "@salilvnair/ngx-diff": "0.0.3",
-    "@salilvnair/ngx-file-explorer": "0.0.1",
+    "@salilvnair/ngx-file-explorer": "0.0.2",
     "@types/dateformat": "^3.0.0",
     "core-js": "^2.5.4",
     "dateformat": "^3.0.3",
@@ -77,16 +78,16 @@
         "electron": "^4.0.1",
         "electron-builder": "^20.38.2"
       },
-      "rootPath": "../<APP_NAME_STAGING>/electron"
+      "rootPath": "../codeclient-staging/electron"
     },
     "app-build": {
-      "outputPath": "../<APP_NAME_STAGING>/electron/build",
-      "packPath": "../<APP_NAME_STAGING>/electron/dist"
+      "outputPath": "../codeclient-staging/electron/build",
+      "packPath": "../codeclient-staging/electron/dist"
     },
     "ng-build": {
-      "outputPath": "../<APP_NAME_STAGING>/angular/build/resources/app/build",
-      "archivePath": "../<APP_NAME_STAGING>/angular/build",
-      "packPath": "../<APP_NAME_STAGING>/angular/dist"
+      "outputPath": "../codeclient-staging/angular/build/resources/app/build",
+      "archivePath": "../codeclient-staging/angular/build",
+      "packPath": "../codeclient-staging/angular/dist"
     }
   }
 }

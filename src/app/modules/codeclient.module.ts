@@ -27,6 +27,8 @@ import { FileHistoryComponent } from '../client/bitbucket/file-history/file-hist
 import { NotifierModule } from '@ngxeu/notifier';
 import { NgxElectronUpdaterModule } from '@ngxeu/core';
 import { MatContextMenuComponent } from '../util/mat-context-menu/mat-context-menu.component';
+import { CommonModule } from '@angular/common';
+import { BrowseFilesComponent } from '../client/bitbucket/browse-files/browse-files.component';
 
 
 const HTTP_INTERCEPTOR_PROVIDER_ARRAY = [
@@ -49,7 +51,8 @@ const COMPONENT_DECLARATION_EXPORT_ARRAY  = [
     FileHistoryComponent,
     DashboardComponent,
     HeaderComponent,
-    CodeClientSettingsComponent
+    CodeClientSettingsComponent,
+    BrowseFilesComponent
 ]
 
 const COMPONENT_DECLARATION_ENTRYPOINT_ARRAY = [
@@ -80,6 +83,7 @@ const UTILITIY_IMPORT_EXPORT_ARRAY = [
 ]
 
 const ANGULAR_CORE_IMPORT_EXPORT_ARRAY = [
+    CommonModule,
     BrowserModule,
     FormsModule,    
     BrowserAnimationsModule,

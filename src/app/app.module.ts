@@ -4,11 +4,11 @@ import { NgpaRepositoryModule } from '@salilvnair/ngpa';
 import { AppComponent } from './app.component';
 import { CodeClientModule } from './modules/codeclient.module';
 import { BrowseFilesComponent } from './client/bitbucket/browse-files/browse-files.component';
+import { NgxFileExplorerModule } from '@salilvnair/ngx-file-explorer';
 
 @NgModule({
   declarations: [
-    AppComponent,
-    BrowseFilesComponent
+    AppComponent
   ],
   imports: [
     CodeClientModule,

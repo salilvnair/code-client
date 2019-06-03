@@ -181,7 +181,7 @@ export class BrowseFilesComponent implements OnInit {
     else if(fileExtension==='jks') {
       iconName = 'lock'
     }
-    else if(fileExtension==='css') {
+    else if(fileExtension==='css' || fileExtension === 'less') {
       iconName = 'css'
     }
     else if(fileExtension==='java') {
