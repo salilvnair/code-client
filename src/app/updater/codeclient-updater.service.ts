@@ -7,6 +7,7 @@ import { CodeClientSettingService } from '../settings/service/codeclient-setting
     providedIn:'root'
 })
 export class CodeClientUpdaterService{
+    manualUpdateCheck = false;
     constructor(
         private codeClientUpdater:CodeClientUpdater,
         private updateNotifier:UpdateNotifier,
@@ -22,6 +23,7 @@ export class CodeClientUpdaterService{
         this.ngZone.run(()=>{
           this.checkForUpdate();
         });
+        this.manualUpdateCheck = true;
       })
       let codeClientSetting = this.codeClientSettingsService.loadSetting();
       if(codeClientSetting && codeClientSetting.app) {
@@ -31,7 +33,7 @@ export class CodeClientUpdaterService{
       }
     }
 
-    checkForUpdate(){
+    checkForUpdate() {
         this.codeClientUpdater.checkForUpdate().subscribe(updateStatus=>{
           if(this.codeClientUpdater.hasPendingUpdates()){
             this.downloadNotifier.notify(null,ActionType.pending).subscribe(notifierAction=>{
@@ -70,7 +72,7 @@ export class CodeClientUpdaterService{
               }
             });                
           }
-          else{
+          else if(this.manualUpdateCheck){
             if(updateStatus.noInfo){
               this.infoNotifier.notify("Looks like you app is in the development mode,\n\n hence no release found!","400px");
             }

@@ -56,7 +56,7 @@ export class FileHistoryComponent implements OnInit, AfterViewInit, OnDestroy  {
     compareButtonTopPosition: string;
     compareButtonLeftPosition: string;
 
-    context = 5;
+    context = 10;
     outputFormat = 'side-by-side';
     diffFiles = [];
     showFileDiff = false;
@@ -114,7 +114,14 @@ export class FileHistoryComponent implements OnInit, AfterViewInit, OnDestroy  {
 
     loadFileHistory(start:string,limit:string) {
         this.matHeaderProgressData.setHidden(false);
-        this.bitbucketService.getFileHistory(start,limit).subscribe(response=>{
+        let observer:any;
+        if(this.bitbucketService.fromRepoFiles){
+            observer = this.bitbucketService.getRepoFileHistory(start,limit);
+        }
+        else{
+            observer = this.bitbucketService.getFileHistory(start,limit);
+        }        
+        observer.subscribe(response=>{
             this.matHeaderProgressData.setHidden(true);
             let responseBody = response.body;
             this.fileHistoryResponse = responseBody;

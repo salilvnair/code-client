@@ -76,6 +76,16 @@ export class BitbucketSettingService {
         return url;  
     }
 
+    getRepoFilesEndpointURL(){
+        let url = '';
+        this.codeClientSettingsService.loadProfileSetting().contextURLs.forEach(ps=>{
+            if(ps.context === BitbucketContext.repoFiles) {
+                url = ps.url;
+            }
+        })
+        return url;  
+    }
+
     
 
 }

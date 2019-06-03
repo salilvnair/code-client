@@ -109,14 +109,14 @@
 
               </div> -->
               <ng-container  *ngIf="showToolBarBtns">
-                  <mat-svg-icon  
+                <mat-svg-icon  
                   icon="search" 
                   title="Search"
                   [disabled]="!dataSource.data?.length>0"
                   button="true"
                   class="filter__icon"
-                  (onClickEvent)="enableSearchBox()"
-                  ></mat-svg-icon>
+                  (onClickEvent)="enableSearchBox()">
+                </mat-svg-icon>
               </ng-container> 
               <!-- <div class="otherBtns">
                   

@@ -307,6 +307,75 @@ export class MatSvgIconComponent implements OnInit {
       )
     );
 
+    this.matIconRegistry.addSvgIcon(
+      "folder_search",
+      this.domSanitizer.bypassSecurityTrustResourceUrl(
+        "assets/icon/folder_search.svg"
+      )
+    );
+
+    this.matIconRegistry.addSvgIcon(
+      "js",
+      this.domSanitizer.bypassSecurityTrustResourceUrl(
+        "assets/icon/js.svg"
+      )
+    );
+
+    this.matIconRegistry.addSvgIcon(
+      "css",
+      this.domSanitizer.bypassSecurityTrustResourceUrl(
+        "assets/icon/css.svg"
+      )
+    );
+
+    this.matIconRegistry.addSvgIcon(
+      "git",
+      this.domSanitizer.bypassSecurityTrustResourceUrl(
+        "assets/icon/git.svg"
+      )
+    );
+
+    this.matIconRegistry.addSvgIcon(
+      "html",
+      this.domSanitizer.bypassSecurityTrustResourceUrl(
+        "assets/icon/html.svg"
+      )
+    );
+
+    this.matIconRegistry.addSvgIcon(
+      "image",
+      this.domSanitizer.bypassSecurityTrustResourceUrl(
+        "assets/icon/image.svg"
+      )
+    );
+
+    this.matIconRegistry.addSvgIcon(
+      "java",
+      this.domSanitizer.bypassSecurityTrustResourceUrl(
+        "assets/icon/java.svg"
+      )
+    );
+
+    this.matIconRegistry.addSvgIcon(
+      "lock",
+      this.domSanitizer.bypassSecurityTrustResourceUrl(
+        "assets/icon/lock.svg"
+      )
+    );
+
+    this.matIconRegistry.addSvgIcon(
+      "pdf",
+      this.domSanitizer.bypassSecurityTrustResourceUrl(
+        "assets/icon/pdf.svg"
+      )
+    );
+
+    this.matIconRegistry.addSvgIcon(
+      "xls",
+      this.domSanitizer.bypassSecurityTrustResourceUrl(
+        "assets/icon/xls.svg"
+      )
+    );
   }
   @Input("icon") icon: string;
   @Input("transform") transform: string;

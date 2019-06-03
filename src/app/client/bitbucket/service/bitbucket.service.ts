@@ -23,10 +23,14 @@ export class BitbucketService {
 
     private selectedDashBoardData: DashBoardModel;
 
+    private dashBoardDataNotifier = new Subject<DashBoardModel>();
+
     private selectedFileHistoryData: FileHistoryBean;
 
     private fileHistoryCompareData: FileHistoryCompareBean[];
-    
+
+    fromRepoFiles = false;
+
     constructor(private bitbucketApi:BitbucketApi,
         public dialog: MatDialog){}
 
@@ -38,7 +42,12 @@ export class BitbucketService {
         return this.selectedDashBoardData;
     }
 
+    publishDashboardData() {
+        return this.dashBoardDataNotifier.asObservable();
+    }
+
     setSelectedDashBoardData(selectedDashBoardData: DashBoardModel) {
+        this.dashBoardDataNotifier.next(selectedDashBoardData);
         this.selectedDashBoardData = selectedDashBoardData;
     }
 
@@ -297,5 +306,40 @@ export class BitbucketService {
             })
         })
         return fileDetailDataNotifier;
+    }
+
+    getRepoFiles(branchName: string, limit: string) {
+        let queryParams:QueryParam[]  = this.buildProjectKeyRepoSlugParams();
+        let queryParam = new QueryParam();
+        queryParam.param = BitbucketSettingConstant.QUERY_PARAM_BRANCH_NAME;
+        queryParam.value = branchName;
+        queryParams.push(queryParam);
+
+        queryParam = new QueryParam();
+        queryParam.param = BitbucketSettingConstant.QUERY_PARAM_OFFSET_LIMIT;
+        queryParam.value = limit;
+        queryParams.push(queryParam);
+        return this.bitbucketApi.getRepoFiles(queryParams);
+    }
+
+    getRepoFileHistory(start:string, limit:string) {
+        let queryParams:QueryParam[]  = this.buildProjectKeyRepoSlugParams();
+        let queryParam = new QueryParam();
+        queryParam.param = BitbucketSettingConstant.QUERY_PARAM_FULL_SRC_PATH;
+        queryParam.value = this.selectedFileHistoryData.filePath;
+        queryParams.push(queryParam);
+        queryParam = new QueryParam();
+        queryParam.param = BitbucketSettingConstant.QUERY_PARAM_COMMIT_ID;
+        queryParam.value = "refs/heads/"+ this.selectedFileHistoryData.branchName;
+        queryParams.push(queryParam);
+        queryParam = new QueryParam();
+        queryParam.param = BitbucketSettingConstant.QUERY_PARAM_OFFSET_START;
+        queryParam.value = start;
+        queryParams.push(queryParam);
+        queryParam = new QueryParam();
+        queryParam.param = BitbucketSettingConstant.QUERY_PARAM_OFFSET_LIMIT;
+        queryParam.value = limit;
+        queryParams.push(queryParam);
+        return this.bitbucketApi.getFileHistory(queryParams);
     }
 }

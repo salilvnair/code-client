@@ -8,6 +8,7 @@ import { QueryParam } from '../../model/query-params.model';
 import { RecentRepoResponse } from '../../rest/model/recent-repo.response';
 import { RepoBranchResponse } from '../../rest/model/repo-branch.response';
 import { FileHistoryResponse } from '../../rest/model/file-history.response';
+import { RepoFilesResponse } from '../../rest/model/repo-files.reponse';
 
 @Injectable({
   providedIn:'root'
@@ -64,5 +65,13 @@ export class BitbucketApi  extends CodeClientBaseApi {
       this.bitbucketSettingService.getRawFileEndpointURL(),
       queryParam);
     return this.http.get(endpointUrl,{responseType:'text'});
+  }
+
+  getRepoFiles(queryParam?:QueryParam[]) {
+    let endpointUrl = this.prepareEndpointURLWithQueryParam(
+      this.bitbucketSettingService.getApiPrefix(),
+      this.bitbucketSettingService.getRepoFilesEndpointURL(),
+      queryParam);
+    return this.http.get<RepoFilesResponse>(endpointUrl,{observe:'response'});
   }
 }

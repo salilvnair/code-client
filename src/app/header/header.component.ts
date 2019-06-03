@@ -1,6 +1,7 @@
 import { Component, OnInit, EventEmitter, Output, ViewChild } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
+import { BitbucketService } from '../client/bitbucket/service/bitbucket.service';
 
 @Component({
   selector: 'codeclient-header',
@@ -10,14 +11,26 @@ import { filter } from 'rxjs/operators';
 export class HeaderComponent implements OnInit {
   highLightElement: string;
   @Output() sideNavToggle = new EventEmitter<void>();
-
+  showFileBrowseTab = false;
   constructor(
-    private router: Router
+    private router: Router,
+    private bitBucketService: BitbucketService
     ) {}
 
   ngOnInit() {
     this.highlightElementOnRoute();
-    //this.currentlyActive('/dashboard');
+    this.toggleBrowseFileTab();
+  }
+
+  toggleBrowseFileTab() {
+    this.bitBucketService.publishDashboardData().subscribe(dashBoardData=>{
+      if(dashBoardData) {
+        this.showFileBrowseTab = true;
+      }
+      else{
+        this.showFileBrowseTab = false;
+      }
+    })
   }
 
   highlightElementOnRoute() {

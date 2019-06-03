@@ -514,6 +514,7 @@ export class CommitHistoryComponent implements OnInit, AfterViewInit, OnDestroy 
         selectedFileHistory.commitId = commitId;
         selectedFileHistory.filePath = filePath;
         this.bitbucketService.setSelectedFileHistoryData(selectedFileHistory);
+        this.bitbucketService.fromRepoFiles = false;
         this.router.navigate(["file-history"]);
     }
 

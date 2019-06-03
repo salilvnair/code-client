@@ -5,4 +5,5 @@ export class BitbucketContext {
     static commitHistoryFileChanges = "commitHistoryFileChanges";
     static fileHistory = "fileHistory";
     static rawFile = "rawFile";
+    static repoFiles = "repoFiles";
 };

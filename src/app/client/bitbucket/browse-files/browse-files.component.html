@@ -1,0 +1,62 @@
+<div class="browse-files">
+    <div class="browse-header">
+        <mat-form-field appearance="outline" class="branch__lov">
+            <mat-label>
+              <mat-svg-icon 
+                  matPrefix 
+                  title="Branch"
+                  icon="branch">
+              </mat-svg-icon>
+              Branch
+            </mat-label>
+            <mat-select 
+              [formControl]="branchNameCtrl" 
+              [(value)]="selectedBranchName"
+              placeholder="Branch" 
+              (selectionChange)="onChangeRepoBranch()"
+              #branchSelect>
+              <mat-option>
+                <ngx-mat-select-search 
+                placeholderLabel="Enter branch name"
+                [formControl]="branchNameFilterCtrl">
+                <mat-svg-icon 
+                  matPrefix 
+                  title="Clear"
+                  ngxMatSelectSearchClear
+                  icon="close">
+              </mat-svg-icon>
+              </ngx-mat-select-search>
+              </mat-option>
+        
+              <mat-option *ngFor="let bank of filteredBranchNames | async" [value]="bank">
+                {{bank}}
+              </mat-option>
+            </mat-select>
+        </mat-form-field>
+    </div>
+    <div class="browse-body">
+      <mat-form-field class="filter__field">
+          <mat-label>
+            Search
+          </mat-label>
+          <mat-svg-icon 
+            matPrefix 
+            title="Find"
+            icon="search">
+          </mat-svg-icon>
+          <input matInput (keyup)="applyFilter($event.target.value)">
+      </mat-form-field>
+      <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef> Name </th>
+          <td mat-cell *matCellDef="let element">
+              <!-- <mat-svg-icon [icon]="getFileIcon(element)" [title]="element"></mat-svg-icon> -->
+              <img class="file-icon" [src]="getFileIcon(element)" alt="CodeClient" />
+              <a href="javascript:void(0);" (click)="onFilePathClick(element)" style="font-family: monospace;vertical-align:middle;">{{element}}</a>
+          </td>
+        </ng-container>      
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+    </div>
+</div>

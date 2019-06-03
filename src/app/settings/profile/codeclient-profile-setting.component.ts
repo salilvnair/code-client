@@ -97,6 +97,13 @@ export class CodeClientProfileSettingComponent implements OnInit {
       contextURL.displayName = 'Commit History Download Raw File URL Context';
       contextURL.url = '';
       contextURLs.push(contextURL);
+
+      contextURL = new ContextURL();
+      contextURL.context = BitbucketContext.repoFiles;
+      contextURL.displayName = 'Find All Repo Files URL Context';
+      contextURL.url = '';
+      contextURLs.push(contextURL);
+
       profileSetting.profile = 'bitbucket';
       profileSetting.contextURLs = contextURLs;
       return profileSetting;

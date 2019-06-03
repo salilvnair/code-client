@@ -3,7 +3,6 @@ import { BitbucketService } from '../client/bitbucket/service/bitbucket.service'
 import { DashBoardModel } from '../client/bitbucket/model/dashboard.model';
 import { Router } from '@angular/router';
 import { CodeClientSettingService } from '../settings/service/codeclient-settings.service';
-import { CodeClientSetting } from '../settings/model/codeclient-setting.model';
 import { MatHeaderProgressData } from '../util/mat-header-progress/mat-header-progress.data';
 
 @Component({
@@ -55,6 +54,7 @@ export class DashboardComponent implements OnInit {
     }
 
     init() {
+        this.resetSelectedDashboardData();
         let codeClientSetting = this.codeClientSettingsService.loadSetting();
         let profileSetting = this.codeClientSettingsService.loadProfileSetting();
         if(codeClientSetting && 
@@ -75,7 +75,11 @@ export class DashboardComponent implements OnInit {
         }
         else {
             this.showSettingsDialog();
-        }
+        }        
+    }
+
+    resetSelectedDashboardData() {
+        this.bitbucketService.setSelectedDashBoardData(null);
     }
 
     showSettingsDialog() {        
