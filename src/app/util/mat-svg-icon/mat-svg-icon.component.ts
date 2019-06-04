@@ -376,6 +376,13 @@ export class MatSvgIconComponent implements OnInit {
         "assets/icon/xls.svg"
       )
     );
+
+    this.matIconRegistry.addSvgIcon(
+      "side_arrow",
+      this.domSanitizer.bypassSecurityTrustResourceUrl(
+        "assets/icon/side_arrow.svg"
+      )
+    );    
   }
   @Input("icon") icon: string;
   @Input("transform") transform: string;

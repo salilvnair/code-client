@@ -10,14 +10,14 @@
             <mat-option *ngFor="let author of authors" 
                 [value]="author">{{author}}</mat-option>
         </mat-select> -->
-        <mat-select [formControl]="bankMultiCtrl" 
+        <mat-select [formControl]="branchMultiCtrl" 
             placeholder="Authors" 
             [(value)]="selectedAuthors"
             (selectionChange)="dirtyCheck()"
             multiple #authorSelect>
           <ngx-mat-select-search 
               placeholderLabel="Select author names"
-              [formControl]="bankMultiFilterCtrl">
+              [formControl]="branchMultiFilterCtrl">
               <mat-svg-icon 
                 matPrefix 
                 title="Clear"
@@ -27,7 +27,7 @@
             </mat-svg-icon>
           </ngx-mat-select-search>
           <mat-option 
-              *ngFor="let author of filteredBanksMulti | async" 
+              *ngFor="let author of filteredBranchsMulti | async" 
               [value]="author">
             {{author}}
           </mat-option>

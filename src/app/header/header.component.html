@@ -17,7 +17,7 @@
                     Dashboard
                     </a>
                 </li>
-                <li *ngIf="showFileBrowseTab">
+                <li *ngIf="showDashboardDependentTabs">
                     <a 
                         routerLink="/browse-files"
                         [ngStyle]="getHighlightColor('/browse-files')"
@@ -25,7 +25,16 @@
                         mat-button >
                         Browse Files
                     </a>
-                </li>               
+                </li>  
+                <li *ngIf="showDashboardDependentTabs">
+                        <a 
+                            routerLink="/branch-diff"
+                            [ngStyle]="getHighlightColor('/branch-diff')"
+                            (click)="currentlyActive('/branch-diff')"
+                            mat-button >
+                            Compare Branches
+                        </a>
+                </li>              
             </ul>
         </div>
         <div fxFlex fxLayout fxLayoutAlign="flex-end" fxHide.xs>

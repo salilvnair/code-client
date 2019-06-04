@@ -14,7 +14,7 @@ export class HeaderComponent implements OnInit {
   highLightElement: string;
   logoSrc = "assets/logo/code-client-64.png";
   @Output() sideNavToggle = new EventEmitter<void>();
-  showFileBrowseTab = false;
+  showDashboardDependentTabs = false;
   constructor(
     private router: Router,
     private bitBucketService: BitbucketService,
@@ -32,10 +32,10 @@ export class HeaderComponent implements OnInit {
   toggleBrowseFileTab() {
     this.bitBucketService.publishDashboardData().subscribe(dashBoardData=>{
       if(dashBoardData) {
-        this.showFileBrowseTab = true;
+        this.showDashboardDependentTabs = true;
       }
       else{
-        this.showFileBrowseTab = false;
+        this.showDashboardDependentTabs = false;
       }
     })
   }

@@ -1,0 +1,221 @@
+<!-- <mat-svg-icon 
+    class="mrg__left-10"
+    *ngIf="!showFileDiff"
+    (onClickEvent)="closeFileHistory()"  
+    button="true"          
+    title="Go Back"
+    icon="return">
+</mat-svg-icon> -->
+<div class="mat-elevation-z8 file-history" *ngIf="!showFileDiff">    
+    <div class="header-filter">
+        <div class="searchbar__container">
+            <div class="branch-filter">
+                <mat-form-field appearance="outline" class="branch__lov">
+                    <mat-label>
+                      <mat-svg-icon 
+                          matPrefix 
+                          title="Branch"
+                          icon="branch">
+                      </mat-svg-icon>
+                      To Branch
+                    </mat-label>
+                    <mat-select 
+                      [formControl]="toBranchNameCtrl" 
+                      [(value)]="selectedToBranchName"
+                      placeholder="To Branch" 
+                      (selectionChange)="onChangeRepoBranch()"
+                      #branchSelect>
+                      <mat-option>
+                        <ngx-mat-select-search 
+                        placeholderLabel="Enter branch name"
+                        [formControl]="toBranchNameFilterCtrl">
+                        <mat-svg-icon 
+                          matPrefix 
+                          title="Clear"
+                          ngxMatSelectSearchClear
+                          icon="close">
+                      </mat-svg-icon>
+                      </ngx-mat-select-search>
+                      </mat-option>                      
+                      <mat-option *ngFor="let branch of filteredToBranchNames | async" 
+                        [value]="branch"
+                        [disabled]="branch==selectedFromBranchName"
+                        >
+                        {{branch}}
+                      </mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-svg-icon 
+                  class="compare__arrow"                   
+                  title="Compare"                  
+                  icon="side_arrow">
+                </mat-svg-icon>
+                <mat-form-field appearance="outline" class="branch__lov">
+                    <mat-label>
+                      <mat-svg-icon 
+                          matPrefix 
+                          title="Branch"
+                          icon="branch">
+                      </mat-svg-icon>
+                      From Branch
+                    </mat-label>
+                    <mat-select 
+                      [formControl]="fromBranchNameCtrl" 
+                      [(value)]="selectedFromBranchName"
+                      placeholder="From Branch" 
+                      (selectionChange)="onChangeRepoBranch()"
+                      #branchSelect>
+                      <mat-option>
+                        <ngx-mat-select-search 
+                        placeholderLabel="Enter branch name"
+                        [formControl]="fromBranchNameFilterCtrl">
+                        <mat-svg-icon 
+                          matPrefix 
+                          title="Clear"
+                          ngxMatSelectSearchClear
+                          icon="close">
+                        </mat-svg-icon>
+                      </ngx-mat-select-search>
+                      </mat-option>
+                      <mat-option value=""></mat-option>
+                      <mat-option *ngFor="let branch of filteredFromBranchNames | async" 
+                        [disabled]="branch==selectedToBranchName"
+                        [value]="branch">
+                        {{branch}}
+                      </mat-option>
+                    </mat-select>
+                </mat-form-field>   
+                <mat-form-field appearance="outline" class="merge-setting__lov">
+                    <mat-label>
+                      <mat-svg-icon 
+                          matPrefix 
+                          title="Merge Setting"
+                          icon="merge">
+                      </mat-svg-icon>
+                      Merge Setting
+                    </mat-label>
+                    <mat-select 
+                      placeholder="Merge Type" 
+                      [(value)]="selectedMergeSetting"
+                      (selectionChange)="onChangeMergeSetting()"
+                      >
+                      <mat-option value="include">
+                        Show Merges
+                      </mat-option>
+                      <mat-option value="exclude">
+                        Hide Merges
+                      </mat-option>
+                    </mat-select>
+                </mat-form-field>             
+            </div>
+            <ng-container>
+                <div class="seachboxText__container" [ngClass]="{'slide__out': !showSearchBox, 'slide__in': showSearchBox}">
+                    <mat-form-field class="seachboxText__input">
+                        <input class="filter__input"
+                            matInput 
+                            [(ngModel)]="filterString"
+                            (keyup)="applyFilter($event.target.value)"                    
+                            >
+                            <!-- (focus)="setupFilter('name')" -->   
+                    </mat-form-field>
+                    <mat-form-field class="seachboxText__lov" >
+                      <mat-select
+                        placeholder="Column"
+                        [(value)]="lovSelected">
+                          <mat-option value="all">All</mat-option> 
+                          <ng-container *ngFor="let filterColumn of filterColumns">
+                              <mat-option [value]="filterColumn">{{filterColumn | titlecase}}</mat-option> 
+                          </ng-container>                                        
+                      </mat-select>
+                    </mat-form-field>
+                    <mat-svg-icon 
+                      class="filter__close"
+                      button="true"
+                      (onClickEvent)="closeSearchBox()"
+                      title="Close"
+                      icon="close">
+                    </mat-svg-icon>
+                </div>                  
+              </ng-container>                
+              <div class="toolbar__btns" [ngClass]="{'slide-toolbar__in': showSearchBox}">
+                <ng-container  *ngIf="showToolBarBtns">
+                  <mat-svg-icon  
+                    icon="search" 
+                    title="Search"
+                    [disabled]="!dataSource.data?.length>0"
+                    button="true"
+                    class="filter__icon"
+                    (onClickEvent)="enableSearchBox()">
+                  </mat-svg-icon>
+                </ng-container> 
+                <ng-container  *ngIf="showToolBarBtns">
+                    <mat-svg-icon  
+                        title="Filter Results" 
+                        icon="filter" 
+                        [disabled]="!dataSource.data?.length>0"
+                        button="true"
+                        class="filter__icon"
+                        (onClickEvent)="openFilterDialog()"
+                    ></mat-svg-icon>
+                    </ng-container>        
+                      <mat-svg-icon  
+                          title="Export To Excel" 
+                          icon="xls_glossy" 
+                          [disabled]="!dataSource.data?.length>0"
+                          button="true"
+                          (onClickEvent)="exportToExcel()"
+                      ></mat-svg-icon>                    
+              </div>
+        </div>
+    </div>
+    <table *ngIf="dataSource.data?.length>0" mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort multiTemplateDataRows>
+        <ng-container matColumnDef="{{ column }}"
+            *ngFor="let column of displayedColumns"
+            >
+            <th mat-header-cell *matHeaderCellDef>
+                {{ column | titlecase }}
+            </th>  
+            <td mat-cell *matCellDef="let element">
+              <ng-container *ngIf="column == 'commitId'; else other_column">
+                <div class="hash__container">
+                  <span class="clipboard-icon__container">
+                    <mat-svg-icon
+                        class="clipboard-icon"
+                        icon="clipboard"
+                        button="true"
+                        [copy-to-clipboard]="element[column]"
+                        haltOtherEvents="true">
+                    </mat-svg-icon>
+                  </span>
+                  <span class="hashid__container">{{ element[column] }}</span>
+                </div>
+              </ng-container>
+              <ng-template #other_column> {{ element[column] }} </ng-template>
+            </td>          
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let element; columns: displayedColumns;"
+            class="example-element-row"></tr>
+    </table>    
+    <div [hidden]="!dataSource.data?.length>0">
+      <mat-paginator
+        [pageSizeOptions]="[5, 10, 20, 50, 100]"
+        showFirstLastButtons>
+      </mat-paginator>
+    </div>
+</div>
+<!-- <mat-svg-icon 
+    class="mrg__left-10"
+    *ngIf="showFileDiff"
+    (onClickEvent)="closeFileDiff()"  
+    button="true"          
+    title="Go Back"
+    icon="return">
+</mat-svg-icon>
+<div class="file-diff mrg__left-20" *ngIf="showFileDiff">    
+    <ngx-diff 
+        [diffFiles]="diffFiles"
+        [context]="context" 
+        [outputFormat]="outputFormat">
+    </ngx-diff>
+</div> -->

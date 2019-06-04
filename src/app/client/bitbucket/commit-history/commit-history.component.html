@@ -35,8 +35,8 @@
                       </ngx-mat-select-search>
                       </mat-option>
                 
-                      <mat-option *ngFor="let bank of filteredBranchNames | async" [value]="bank">
-                        {{bank}}
+                      <mat-option *ngFor="let branch of filteredBranchNames | async" [value]="branch">
+                        {{branch}}
                       </mat-option>
                     </mat-select>
                 </mat-form-field>
@@ -63,44 +63,44 @@
                     </mat-select>
                 </mat-form-field>
             </div>
-                <ng-container>
-                  <div class="seachboxText__container" [ngClass]="{'slide__out': !showSearchBox, 'slide__in': showSearchBox}">
-                      <mat-form-field class="seachboxText__input">
-                          <mat-svg-icon                               
-                              matPrefix 
-                              title="Match Whole Word"
-                              icon="match_case"
-                              transform="scale(1.5)" 
-                              [ngStyle]="strictMatch && {'border':'1.5px solid #3f51b5'}"
-                              (onClickEvent)="toggleMatchCase()"
-                              button="true">
-                          </mat-svg-icon> 
-                          <input class="filter__input"
-                              matInput 
-                              [(ngModel)]="filterString"
-                              (keyup)="applyFilter($event.target.value)"                    
-                              >
-                              <!-- (focus)="setupFilter('name')" -->   
-                      </mat-form-field>
-                      <mat-form-field class="seachboxText__lov" >
-                        <mat-select
-                          placeholder="Column"
-                          [(value)]="lovSelected">
-                            <mat-option value="all">All</mat-option> 
-                            <ng-container *ngFor="let filterColumn of filterColumns">
-                                <mat-option [value]="filterColumn">{{filterColumn | titlecase}}</mat-option> 
-                            </ng-container>                                        
-                        </mat-select>
-                      </mat-form-field>
-                      <mat-svg-icon 
-                        class="filter__close"
-                        button="true"
-                        (onClickEvent)="closeSearchBox()"
-                        title="Close"
-                        icon="close">
-                     </mat-svg-icon>
-                  </div>                  
-                </ng-container>                
+            <ng-container>
+              <div class="seachboxText__container" [ngClass]="{'slide__out': !showSearchBox, 'slide__in': showSearchBox}">
+                  <mat-form-field class="seachboxText__input">
+                      <mat-svg-icon                               
+                          matPrefix 
+                          title="Match Whole Word"
+                          icon="match_case"
+                          transform="scale(1.5)" 
+                          [ngStyle]="strictMatch && {'border':'1.5px solid #3f51b5'}"
+                          (onClickEvent)="toggleMatchCase()"
+                          button="true">
+                      </mat-svg-icon> 
+                      <input class="filter__input"
+                          matInput 
+                          [(ngModel)]="filterString"
+                          (keyup)="applyFilter($event.target.value)"                    
+                          >
+                          <!-- (focus)="setupFilter('name')" -->   
+                  </mat-form-field>
+                  <mat-form-field class="seachboxText__lov" >
+                    <mat-select
+                      placeholder="Column"
+                      [(value)]="lovSelected">
+                        <mat-option value="all">All</mat-option> 
+                        <ng-container *ngFor="let filterColumn of filterColumns">
+                            <mat-option [value]="filterColumn">{{filterColumn | titlecase}}</mat-option> 
+                        </ng-container>                                        
+                    </mat-select>
+                  </mat-form-field>
+                  <mat-svg-icon 
+                    class="filter__close"
+                    button="true"
+                    (onClickEvent)="closeSearchBox()"
+                    title="Close"
+                    icon="close">
+                  </mat-svg-icon>
+              </div>                  
+            </ng-container>                
             <div class="toolbar__btns" [ngClass]="{'slide-toolbar__in': showSearchBox}">
               <!-- <div class="searchBtn">
 

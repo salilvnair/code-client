@@ -162,7 +162,7 @@ export class CommitHistoryComponent implements OnInit, AfterViewInit, OnDestroy 
     }
 
     /**
-   * Sets the initial value after the filteredBanks are loaded initially
+   * Sets the initial value after the filteredBranchs are loaded initially
    */
     protected setInitialValue() {
         this.filteredBranchNames
@@ -171,7 +171,7 @@ export class CommitHistoryComponent implements OnInit, AfterViewInit, OnDestroy 
             // setting the compareWith property to a comparison function
             // triggers initializing the selection according to the initial value of
             // the form control (i.e. _initializeSelection())
-            // this needs to be done after the filteredBanks are loaded initially
+            // this needs to be done after the filteredBranchs are loaded initially
             // and after the mat-option elements are available
             this.branchSelect.compareWith = (a: string, b: string) => a && b && a === b;
         });
@@ -192,7 +192,7 @@ export class CommitHistoryComponent implements OnInit, AfterViewInit, OnDestroy 
         }
         // filter the branch names
         this.filteredBranchNames.next(
-        this.repoBranches.filter(bank => bank.toLowerCase().indexOf(search) > -1)
+        this.repoBranches.filter(branch => branch.toLowerCase().indexOf(search) > -1)
         );
     }
 

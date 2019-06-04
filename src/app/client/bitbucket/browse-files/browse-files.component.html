@@ -28,8 +28,8 @@
               </ngx-mat-select-search>
               </mat-option>
         
-              <mat-option *ngFor="let bank of filteredBranchNames | async" [value]="bank">
-                {{bank}}
+              <mat-option *ngFor="let branch of filteredBranchNames | async" [value]="branch">
+                {{branch}}
               </mat-option>
             </mat-select>
         </mat-form-field>
