@@ -9,6 +9,7 @@ import { RepoFilesResponse } from 'src/app/api/rest/model/repo-files.reponse';
 import { MatHeaderProgressData } from 'src/app/util/mat-header-progress/mat-header-progress.data';
 import { CommonUtility } from 'src/app/util/common/common.util';
 import { FileHistoryBean } from '../model/file-history.model';
+import { HeaderService } from 'src/app/header/header.service';
 
 @Component({
   selector: 'browse-files',
@@ -43,6 +44,7 @@ export class BrowseFilesComponent implements OnInit {
   constructor(
     private bitbucketService: BitbucketService,
     private router: Router,
+    private headerService: HeaderService,
     private matHeaderProgressData:MatHeaderProgressData
   ) {}
 
@@ -117,17 +119,7 @@ export class BrowseFilesComponent implements OnInit {
   }
 
   changeHeaderTitle(defaultTitle:boolean) {
-    if(defaultTitle){
-        document.getElementById('headerTitle').innerText = "Code Client";
-    }
-    else{
-        if(this.bitbucketService.getSelectedDashBoardData()) {
-            document.getElementById('headerTitle').innerText = this.bitbucketService.getSelectedDashBoardData().repo_name;
-        }
-        else{
-            document.getElementById('headerTitle').innerText = "Code Client";
-        }
-    }
+    this.headerService.changeHeader(defaultTitle);
   }
 
   loadSelectedRepoBranchNames() {

@@ -13,6 +13,7 @@ import { FileHistoryResponse } from 'src/app/api/rest/model/file-history.respons
 import { CommitHistoryFilteredModel } from '../commit-history/commit-history-filter-dialog/commit-history-filter.model';
 import { NgxDiffFile } from '@salilvnair/ngx-diff';
 import { CommonUtility } from 'src/app/util/common/common.util';
+import { HeaderService } from 'src/app/header/header.service';
 
 @Component({
     selector:'file-history',
@@ -25,7 +26,9 @@ export class FileHistoryComponent implements OnInit, AfterViewInit, OnDestroy  {
                 private dateUtil:DateUtil,
                 private router: Router,
                 private excelUtil:ExcelUtil,
-                private matHeaderProgressData:MatHeaderProgressData){}
+                private matHeaderProgressData:MatHeaderProgressData,
+                private headerService: HeaderService
+                ){}
     dataSource = new MatTableDataSource<FileHistoryData>();
     @ViewChild(MatPaginator) paginator: MatPaginator;
     @ViewChild(MatSort) sort: MatSort;
@@ -78,17 +81,7 @@ export class FileHistoryComponent implements OnInit, AfterViewInit, OnDestroy  {
     }
 
     changeHeaderTitle(defaultTitle:boolean) {
-        if(defaultTitle){
-            document.getElementById('headerTitle').innerText = "Code Client";
-        }
-        else{
-            if(this.bitbucketService.getSelectedDashBoardData()) {
-                document.getElementById('headerTitle').innerText = this.bitbucketService.getSelectedDashBoardData().repo_name;
-            }
-            else{
-                document.getElementById('headerTitle').innerText = "Code Client";
-            }
-        }
+        this.headerService.changeHeader(defaultTitle);
     }
 
     initFileHistoryTableDataSource() {

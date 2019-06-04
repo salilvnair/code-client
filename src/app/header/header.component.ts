@@ -2,6 +2,8 @@ import { Component, OnInit, EventEmitter, Output, ViewChild } from '@angular/cor
 import { Router, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
 import { BitbucketService } from '../client/bitbucket/service/bitbucket.service';
+import { Subject } from 'rxjs';
+import { HeaderService } from './header.service';
 
 @Component({
   selector: 'codeclient-header',
@@ -10,14 +12,19 @@ import { BitbucketService } from '../client/bitbucket/service/bitbucket.service'
 })
 export class HeaderComponent implements OnInit {
   highLightElement: string;
+  logoSrc = "assets/logo/code-client-64.png";
   @Output() sideNavToggle = new EventEmitter<void>();
   showFileBrowseTab = false;
   constructor(
     private router: Router,
-    private bitBucketService: BitbucketService
+    private bitBucketService: BitbucketService,
+    private headerService: HeaderService
     ) {}
 
   ngOnInit() {
+    this.headerService.logoSrcListener().subscribe(logo=>{
+      this.logoSrc = logo;
+    })
     this.highlightElementOnRoute();
     this.toggleBrowseFileTab();
   }

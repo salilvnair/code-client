@@ -16,6 +16,7 @@ import { Router } from '@angular/router';
 import { ExcelUtil } from 'src/app/util/excel.util';
 import { FileHistoryBean } from '../model/file-history.model';
 import { NgxDiffFile } from '@salilvnair/ngx-diff';
+import { HeaderService } from 'src/app/header/header.service';
 
 @Component({
     selector:'commit-history',
@@ -41,6 +42,7 @@ export class CommitHistoryComponent implements OnInit, AfterViewInit, OnDestroy 
                 private dateUtil:DateUtil,
                 private router: Router,
                 private excelUtil:ExcelUtil,
+                private headerService: HeaderService,
                 private matHeaderProgressData:MatHeaderProgressData){}
     //dataSource: CommitHistoryData[] = [];
     dataSource = new MatTableDataSource<CommitHistoryData>();
@@ -94,7 +96,7 @@ export class CommitHistoryComponent implements OnInit, AfterViewInit, OnDestroy 
 
     init() {
         this.redirectToDashBoardCheck();
-        this.changeHeaderTitle(false);
+        this.changeHeader(false);
         this.loadSelectedRepoBranchNames();        
     }
 
@@ -111,18 +113,8 @@ export class CommitHistoryComponent implements OnInit, AfterViewInit, OnDestroy 
         }
     }
 
-    changeHeaderTitle(defaultTitle:boolean) {
-        if(defaultTitle){
-            document.getElementById('headerTitle').innerText = "Code Client";
-        }
-        else{
-            if(this.bitbucketService.getSelectedDashBoardData()) {
-                document.getElementById('headerTitle').innerText = this.bitbucketService.getSelectedDashBoardData().repo_name;
-            }
-            else{
-                document.getElementById('headerTitle').innerText = "Code Client";
-            }
-        }
+    changeHeader(defaultTitle:boolean) {
+        this.headerService.changeHeader(defaultTitle);
     }
 
     initCommitHistoryTableDataSource() {
@@ -163,7 +155,7 @@ export class CommitHistoryComponent implements OnInit, AfterViewInit, OnDestroy 
     }
     
     ngOnDestroy() {
-        this.changeHeaderTitle(true);
+        this.changeHeader(true);
         this._onDestroy.next();
         this._onDestroy.complete();
         this.commitIdsFileChangesSubscription.unsubscribe();
