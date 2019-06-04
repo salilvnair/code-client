@@ -1,4 +1,4 @@
-const { app, BrowserWindow, Menu} = require("electron");
+const { app,dialog, BrowserWindow, Menu} = require("electron");
 let dev;
 const args = process.argv.slice(1);
 dev = args.some(val => val === '--dev');
@@ -17,6 +17,15 @@ let browserWindow;
 
 function sendStatusToWindow(text) {
   browserWindow.webContents.send(text);
+}
+
+function aboutApp() {
+  const response = dialog.showMessageBox({
+    type: 'none',
+    icon: __dirname + "/build/assets/logo/code-client-64.png",
+    message: 'Code Client' ,
+    detail: 'Author: Salil V Nair \nversion:'+app.getVersion()+'',
+  });
 }
 
 function createWindow() {
@@ -54,7 +63,9 @@ function createWindow() {
   var template = [{
     label: "Application",
     submenu: [
-        { label: "About Application", selector: "orderFrontStandardAboutPanel:" },
+        { label: "About Application", click: function() {
+          aboutApp();
+        } },
         { type: "separator" },
         { label: "Hide", accelerator: "CmdOrCtrl+H", click: function() {
           if(browserWindow.isMenuBarVisible()){
