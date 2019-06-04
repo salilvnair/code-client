@@ -66,15 +66,13 @@
                             </ng-container>                                        
                         </mat-select>
                       </mat-form-field>
-                      <button 
-                          class="seachboxText_closeBtn"
-                          title="Close"
-                          color="warn" 
-                          mat-button 
-                          mat-icon-button
-                          (click)="closeSearchBox()"
-                          ><mat-icon>close</mat-icon>
-                      </button>
+                      <mat-svg-icon 
+                        class="filter__close"
+                        button="true"
+                        (onClickEvent)="closeSearchBox()"
+                        title="Close"
+                        icon="close">
+                    </mat-svg-icon>
                   </div>                  
                 </ng-container>                
             <div class="toolbar__btns" [ngClass]="{'slide-toolbar__in': showSearchBox}">

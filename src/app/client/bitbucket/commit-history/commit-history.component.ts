@@ -50,6 +50,7 @@ export class CommitHistoryComponent implements OnInit, AfterViewInit, OnDestroy 
     @ViewChildren(MatCheckbox) checkboxes:MatCheckbox[];
     @ViewChild(MatMenuTrigger) public menuTrigger : MatMenuTrigger;
     displayedColumns: string[] = ['select','author', 'commitId', 'commitMessage', 'date'];
+    filterColumns: string[] = ['author', 'commitId', 'commitMessage', 'date'];
     showSearchBox = false;
     showToolBarBtns = true;
     lovSelected = "all";
@@ -556,13 +557,24 @@ export class CommitHistoryComponent implements OnInit, AfterViewInit, OnDestroy 
                     let diffData = fileHistoryDetailData;
                     let ngxDiffFile = new NgxDiffFile();
                     ngxDiffFile.fileName = fileName.replace(/^.*[\\\/]/, '');
-                    if(commitFile.fileStatus==='ADD' || commitFile.fileStatus==='COPY') {
-                        ngxDiffFile.oldFileContent = '';
+                    if(diffData[0].commitId===comparableCommits[0]){
+                        if(commitFile.fileStatus==='ADD' || commitFile.fileStatus==='COPY') {
+                            ngxDiffFile.oldFileContent = '';
+                        }
+                        else {
+                            ngxDiffFile.oldFileContent = diffData[1].fileString;
+                        }
+                        ngxDiffFile.newFileContent = diffData[0].fileString;
                     }
-                    else {
-                        ngxDiffFile.oldFileContent = diffData[1].fileString;
+                    else if (diffData[1].commitId===comparableCommits[0]){
+                        if(commitFile.fileStatus==='ADD' || commitFile.fileStatus==='COPY') {
+                            ngxDiffFile.oldFileContent = '';
+                        }
+                        else {
+                            ngxDiffFile.oldFileContent = diffData[0].fileString;
+                        }
+                        ngxDiffFile.newFileContent = diffData[1].fileString;
                     }
-                    ngxDiffFile.newFileContent = diffData[0].fileString;
                     this.diffFiles.push(ngxDiffFile);   
                     if(this.diffFiles.length === commitHistoryFileData.commitedFiles.length ) {
                         this.showFileDiff = true;

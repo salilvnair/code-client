@@ -28,7 +28,7 @@ export class HttpAuthInterceptor implements HttpInterceptor {
                 (error: any, caught: Observable<HttpEvent<any>>) => {
                     let requestUrl = request.url;
                     let isAppUpdateUrl = false;
-                    if(requestUrl.indexOf('codeclient/releases')>-1){
+                    if(requestUrl.indexOf('code-client/releases')>-1){
                         isAppUpdateUrl = true;
                     }
                     if (error.status === 0 && !isAppUpdateUrl) {

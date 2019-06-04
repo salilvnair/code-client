@@ -421,18 +421,24 @@ export class FileHistoryComponent implements OnInit, AfterViewInit, OnDestroy  {
     onCompare() {
         if(this.selectedFilePath) {
             this.matHeaderProgressData.setHidden(false);
-            this.bitbucketService.getRawFileFromCommitIds(
+            this.bitbucketService.getRawFileCommiDetailsFromCommitIds(
                 this.comparableCommits,
                 this.selectedFilePath
-            ).subscribe(fetched=>{
-                if(fetched) {
+            ).subscribe(fileHistoryDetailData=>{
+                if(fileHistoryDetailData) {
                     this.matHeaderProgressData.setHidden(true);
-                    let diffData = this.bitbucketService.getFileHistoryCompareData();
+                    let diffData = fileHistoryDetailData;
                     let ngxDiffFiles = [];
                     let ngxDiffFile = new NgxDiffFile();
+                    if(diffData[0].commitId===this.comparableCommits[0]){
+                        ngxDiffFile.oldFileContent = diffData[1].fileString;
+                        ngxDiffFile.newFileContent = diffData[0].fileString;
+                    }
+                    else if (diffData[1].commitId===this.comparableCommits[0]){
+                        ngxDiffFile.oldFileContent = diffData[0].fileString;
+                        ngxDiffFile.newFileContent = diffData[1].fileString;
+                    }
                     ngxDiffFile.fileName = this.selectedFilePath.replace(/^.*[\\\/]/, '');;
-                    ngxDiffFile.oldFileContent = diffData[1].fileString;
-                    ngxDiffFile.newFileContent = diffData[0].fileString;
                     ngxDiffFiles.push(ngxDiffFile);
                     this.diffFiles = ngxDiffFiles;
                     this.showFileDiff = true;                   
