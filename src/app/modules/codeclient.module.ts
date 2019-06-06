@@ -29,6 +29,7 @@ import { NgxElectronUpdaterModule } from '@ngxeu/core';
 import { MatContextMenuComponent } from '../util/mat-context-menu/mat-context-menu.component';
 import { CommonModule } from '@angular/common';
 import { BrowseFilesComponent } from '../client/bitbucket/browse-files/browse-files.component';
+import { BranchDiffComponent } from '../client/bitbucket/branch-diff/branch-diff.component';
 
 
 const HTTP_INTERCEPTOR_PROVIDER_ARRAY = [
@@ -52,7 +53,8 @@ const COMPONENT_DECLARATION_EXPORT_ARRAY  = [
     DashboardComponent,
     HeaderComponent,
     CodeClientSettingsComponent,
-    BrowseFilesComponent
+    BrowseFilesComponent,
+    BranchDiffComponent
 ]
 
 const COMPONENT_DECLARATION_ENTRYPOINT_ARRAY = [

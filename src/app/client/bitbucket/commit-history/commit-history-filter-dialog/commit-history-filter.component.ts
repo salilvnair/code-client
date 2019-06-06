@@ -21,14 +21,14 @@ export class CommitHistoryFilter implements OnInit, AfterViewInit, OnDestroy  {
     selectedAuthors: string[];
     disableOk = true;
 
-    /** control for the selected bank for multi-selection */
-    public bankMultiCtrl: FormControl = new FormControl();
+    /** control for the selected branch for multi-selection */
+    public branchMultiCtrl: FormControl = new FormControl();
 
     /** control for the MatSelect filter keyword multi-selection */
-    public bankMultiFilterCtrl: FormControl = new FormControl();
+    public branchMultiFilterCtrl: FormControl = new FormControl();
 
-    /** list of banks filtered by search keyword */
-    public filteredBanksMulti: ReplaySubject<string[]> = new ReplaySubject<string[]>(1);
+    /** list of branchs filtered by search keyword */
+    public filteredBranchsMulti: ReplaySubject<string[]> = new ReplaySubject<string[]>(1);
 
     /** Subject that emits when the component has been destroyed. */
     protected _onDestroy = new Subject<void>();
@@ -55,12 +55,12 @@ export class CommitHistoryFilter implements OnInit, AfterViewInit, OnDestroy  {
         this.authors.sort();
         
         // load the initial authors list        
-        this.filteredBanksMulti.next(this.authors.slice());
+        this.filteredBranchsMulti.next(this.authors.slice());
         // listen for search field value changes
-        this.bankMultiFilterCtrl.valueChanges
+        this.branchMultiFilterCtrl.valueChanges
         .pipe(takeUntil(this._onDestroy))
         .subscribe(() => {
-        this.filterBanksMulti();
+        this.filterBranchsMulti();
         });
     }
 
@@ -74,36 +74,36 @@ export class CommitHistoryFilter implements OnInit, AfterViewInit, OnDestroy  {
     }
 
     /**
-    * Sets the initial value after the filteredBanks are loaded initially
+    * Sets the initial value after the filteredBranchs are loaded initially
    */
     protected setInitialValue() {
-        this.filteredBanksMulti
+        this.filteredBranchsMulti
         .pipe(take(1), takeUntil(this._onDestroy))
         .subscribe(() => {
             // setting the compareWith property to a comparison function
             // triggers initializing the selection according to the initial value of
             // the form control (i.e. _initializeSelection())
-            // this needs to be done after the filteredBanks are loaded initially
+            // this needs to be done after the filteredBranchs are loaded initially
             // and after the mat-option elements are available
             this.authorSelect.compareWith = (a: string, b: string) => a && b && a === b;
         });
     }
 
-    protected filterBanksMulti() {
+    protected filterBranchsMulti() {
         if (!this.authors) {
             return;
         }
         // get the search keyword
-        let search = this.bankMultiFilterCtrl.value;
+        let search = this.branchMultiFilterCtrl.value;
         if (!search) {
-            this.filteredBanksMulti.next(this.authors.slice());
+            this.filteredBranchsMulti.next(this.authors.slice());
             return;
         } 
         else {
             search = search.toLowerCase();
         }
-        // filter the banks
-        this.filteredBanksMulti.next(
+        // filter the branchs
+        this.filteredBranchsMulti.next(
         this.authors.filter(author => author.toLowerCase().indexOf(search) > -1)
         );
     }
@@ -112,7 +112,7 @@ export class CommitHistoryFilter implements OnInit, AfterViewInit, OnDestroy  {
         if(this.data.commitHistoryFilteredModel) {
             if(this.data.commitHistoryFilteredModel.authors){
                 this.selectedAuthors =  this.data.commitHistoryFilteredModel.authors;
-                this.bankMultiCtrl.setValue(this.selectedAuthors);
+                this.branchMultiCtrl.setValue(this.selectedAuthors);
             }
             if(this.data.commitHistoryFilteredModel.fromDate) {
                 this.fromDate = this.dateUtil.parse(this.data.commitHistoryFilteredModel.fromDate)
