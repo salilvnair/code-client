@@ -1,14 +1,20 @@
 # Code-Client  
-	A Desktop application to see git logs, commit changes and many other features of the providers like Bitbucket, Github, GitLab etc.
+> A Desktop application to see git logs, commit changes and many other features of the       providers like Bitbucket, Github, GitLab etc.
 	It is an Angular Electron fused desktop application build using @ngxeu/cli and @ngxeu/core package along with angular and electron.
+  
+
+&nbsp;
+&nbsp;
+&nbsp;
+  
 	
 	
+- [ ] `1.0.0-rc.1 (Released)
+
+
+##### Client support: `Bitbucket`
 	
-- [ ] `1.0.0-rc.1 (Released)`
-	
-	##### Client support: `Bitbucket`
-	
-	##### Features: 
+##### Features: 
 - Recent Repository(Dashboard), Commit History, File History, Browse Files and Settings screens.
 - Commit history view with dynamic pagination and dynamic data load.
 - Commit history and file history view incorporates filter by author, date and simple text search.
@@ -24,6 +30,12 @@
 - App auto update functionality to handle and any future updates automatically without the need of re-downloading the complete app.
 	
 	
+ &nbsp;
+ &nbsp;
+ &nbsp;
+ &nbsp;
+ 
+  
 - [ ] `1.0.0-rc.2 (Release In Progress)`
 	
 #####  Client support: Bitbucket
