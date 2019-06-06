@@ -245,6 +245,7 @@
                       class="example-element-position"
                       [style.color]="commit.color"
                     >
+
                       <mat-svg-icon
                         *ngIf="commit.fileStatus"
                         icon="history_blue"
@@ -257,6 +258,14 @@
                         [title]="commit.fileStatus | titlecase"
                         [icon]="commit.fileStatus | lowercase"
                       ></mat-svg-icon>
+                      <mat-svg-icon
+                        *ngIf="commit.fileStatus"
+                        icon="download"
+                        transform="scale(.98)"
+                        title="Download file at this point"
+                        (onClickEvent)="downloadFile(expandedElement.commitId,commit.fileName)"
+                        button="true">
+                      </mat-svg-icon>
                     </div>
                   </div>                
                   <!-- <div class="example-element-description">{{ element.message }}</div> -->

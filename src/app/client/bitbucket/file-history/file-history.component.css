@@ -109,7 +109,7 @@
     display:flex;
     justify-content: flex-end;
     width: 80%;
-    margin:16px 12.2px 12.2px 10px;
+    margin:24px 12.2px 12.2px 10px;
   }
   
   .clipboard-icon {
@@ -211,7 +211,7 @@
   .file-path__input {
     margin-right:10px;
     margin-top:10px;
-    width: 940px;
+    width: 800px;
   }
 
   .filter__icon{
@@ -225,5 +225,5 @@
   .filter__close {
     margin-top: 8px;
     margin-left: 5px;
-    margin-right: 5px;
+    margin-right: 20px;
   }

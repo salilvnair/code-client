@@ -112,10 +112,20 @@
                             button="true"
                             (onClickEvent)="onCompare()"
                         ></mat-svg-icon>  
-                        </ng-container>          
+                        </ng-container> 
+                        <mat-svg-icon
+                            [disabled]="comparableCommits?.length != 1 || !dataSource.data?.length>0"
+                            icon="download"
+                            transform="scale(.98)"
+                            class="filter__icon"
+                            title="Download file at this point"
+                            (onClickEvent)="downloadFile()"
+                            button="true">
+                        </mat-svg-icon>         
                         <mat-svg-icon  
                             title="Export To Excel" 
                             icon="xls_glossy" 
+                            class="filter__icon"
                             [disabled]="!dataSource.data?.length>0"
                             button="true"
                             (onClickEvent)="exportToExcel()"

@@ -456,4 +456,16 @@ export class FileHistoryComponent implements OnInit, AfterViewInit, OnDestroy  {
         }
         return false;
     }
+
+    downloadFile() {
+        if(this.comparableCommits.length>0) {
+            let commitIds = [this.comparableCommits[0]];
+            this.matHeaderProgressData.setHidden(false);
+            this.bitbucketService.getRawFileCommiDetailsFromCommitIds(commitIds, this.selectedFilePath).subscribe(fileHistoryBean=>{
+                let fileData = fileHistoryBean[0].fileString;
+                this.matHeaderProgressData.setHidden(true);
+                CommonUtility.download(CommonUtility.getFileNameFromFullPath(this.selectedFilePath),fileData);
+            })
+        }
+    }
 }

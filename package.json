@@ -31,7 +31,7 @@
     "@ngxeu/core": "^1.0.0",
     "@ngxeu/notifier": "0.0.3",
     "@salilvnair/ngpa": "^1.0.4",
-    "@salilvnair/ngx-diff": "0.0.3",
+    "@salilvnair/ngx-diff": "0.0.4",
     "@salilvnair/ngx-file-explorer": "0.0.2",
     "@types/dateformat": "^3.0.0",
     "core-js": "^2.5.4",
