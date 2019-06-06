@@ -110,7 +110,7 @@
                   <mat-svg-icon  
                     icon="search" 
                     title="Search"
-                    [disabled]="!dataSource.data?.length>0"
+                    [disabled]="!(dataSource.data?.length>0)"
                     button="true"
                     class="filter__icon"
                     (onClickEvent)="enableSearchBox()">
@@ -123,7 +123,7 @@
                     <mat-svg-icon  
                         title="Filter Results" 
                         icon="filter" 
-                        [disabled]="!dataSource.data?.length>0"
+                        [disabled]="!(dataSource.data?.length>0)"
                         button="true"
                         class="filter__icon"
                         (onClickEvent)="openFilterDialog()"
@@ -148,7 +148,7 @@
                       <mat-svg-icon  
                           title="Export To Excel" 
                           icon="xls_glossy" 
-                          [disabled]="!dataSource.data?.length>0"
+                          [disabled]="!(dataSource.data?.length>0)"
                           button="true"
                           (onClickEvent)="exportToExcel()"
                       ></mat-svg-icon>  
@@ -268,7 +268,6 @@
                       </mat-svg-icon>
                     </div>
                   </div>                
-                  <!-- <div class="example-element-description">{{ element.message }}</div> -->
                 </div>
               </td>
             </ng-container>
