@@ -17,6 +17,7 @@ import { ExcelUtil } from 'src/app/util/excel.util';
 import { FileHistoryBean } from '../model/file-history.model';
 import { NgxDiffFile } from '@salilvnair/ngx-diff';
 import { HeaderService } from 'src/app/header/header.service';
+import { CommonUtility } from 'src/app/util/common/common.util';
 
 @Component({
     selector:'commit-history',
@@ -578,6 +579,16 @@ export class CommitHistoryComponent implements OnInit, AfterViewInit, OnDestroy 
 
     closeCommitHistoryDetails() {
         this.showFileDiff = false;
+    }
+
+    downloadFile(commitId: string, filePath: string) {
+        let commitIds = [commitId];
+        this.matHeaderProgressData.setHidden(false);
+        this.bitbucketService.getRawFileCommiDetailsFromCommitIds(commitIds, filePath).subscribe(fileHistoryBean=>{
+            let fileData = fileHistoryBean[0].fileString;
+            this.matHeaderProgressData.setHidden(true);
+            CommonUtility.download(CommonUtility.getFileNameFromFullPath(filePath),fileData);
+        })
     }
 
 }

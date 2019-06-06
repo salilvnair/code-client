@@ -382,7 +382,14 @@ export class MatSvgIconComponent implements OnInit {
       this.domSanitizer.bypassSecurityTrustResourceUrl(
         "assets/icon/side_arrow.svg"
       )
-    );    
+    );
+    
+    this.matIconRegistry.addSvgIcon(
+      "download",
+      this.domSanitizer.bypassSecurityTrustResourceUrl(
+        "assets/icon/download.svg"
+      )
+    );  
   }
   @Input("icon") icon: string;
   @Input("transform") transform: string;

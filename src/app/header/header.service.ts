@@ -14,29 +14,31 @@ export class HeaderService {
     }
 
     changeHeader(defaultTitle:boolean) {
-        let isPublic = this.bitbucketService.getSelectedDashBoardData().public;
-        let logoSrc: string;
-        if(isPublic){
-            logoSrc = "assets/icon/public_repo.svg";             
-            this.logoSrcNotifier.next(logoSrc);
-        }
-        else {
-            logoSrc = "assets/icon/private_repo.svg";  
-            this.logoSrcNotifier.next(logoSrc);
-        }
-        if(defaultTitle){
-            document.getElementById('headerTitle').innerText = "Code Client";
-            logoSrc = "assets/logo/code-client-64.png";  
-            this.logoSrcNotifier.next(logoSrc);
-        }
-        else{
-            if(this.bitbucketService.getSelectedDashBoardData()) {
-                document.getElementById('headerTitle').innerText = this.bitbucketService.getSelectedDashBoardData().repo_name;
+        if(this.bitbucketService.getSelectedDashBoardData()) {
+            let isPublic = this.bitbucketService.getSelectedDashBoardData().public;
+            let logoSrc: string;
+            if(isPublic){
+                logoSrc = "assets/icon/public_repo.svg";             
+                this.logoSrcNotifier.next(logoSrc);
             }
-            else{
+            else {
+                logoSrc = "assets/icon/private_repo.svg";  
+                this.logoSrcNotifier.next(logoSrc);
+            }
+            if(defaultTitle){
                 document.getElementById('headerTitle').innerText = "Code Client";
                 logoSrc = "assets/logo/code-client-64.png";  
                 this.logoSrcNotifier.next(logoSrc);
+            }
+            else{
+                if(this.bitbucketService.getSelectedDashBoardData()) {
+                    document.getElementById('headerTitle').innerText = this.bitbucketService.getSelectedDashBoardData().repo_name;
+                }
+                else{
+                    document.getElementById('headerTitle').innerText = "Code Client";
+                    logoSrc = "assets/logo/code-client-64.png";  
+                    this.logoSrcNotifier.next(logoSrc);
+                }
             }
         }
     }

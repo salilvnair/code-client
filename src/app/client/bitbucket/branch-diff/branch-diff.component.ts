@@ -12,6 +12,7 @@ import { HeaderService } from 'src/app/header/header.service';
 import { MatHeaderProgressData } from 'src/app/util/mat-header-progress/mat-header-progress.data';
 import { takeUntil } from 'rxjs/operators';
 import { CommitHistoryFilteredModel } from '../commit-history/commit-history-filter-dialog/commit-history-filter.model';
+import { ExcelExportModel } from '../model/excel-export.model';
 
 @Component({
   selector: 'branch-diff',
@@ -303,7 +304,19 @@ export class BranchDiffComponent implements OnInit {
   }
 
   exportToExcel() {
-    this.excelUtil.exportToExcel(this.dataSource.filteredData,this.bitbucketService.getSelectedDashBoardData().repo_slug,this.selectedToBranchName+"__"+this.selectedFromBranchName);
+    let excelData: ExcelExportModel[] = [];
+    excelData = this.dataSource.filteredData.map(data=>{
+      let excelExportModel : ExcelExportModel = new ExcelExportModel();
+      excelExportModel.author = data.author;
+      excelExportModel.commitId = data.commitId;
+      excelExportModel.commitMessage = data.commitMessage;
+      excelExportModel.date = data.date;
+      if(data.parentCommitId==null || data.parentCommitId==='') {
+        excelExportModel.isMergeCommit = true;
+      }
+      return excelExportModel;
+    })
+    this.excelUtil.exportToExcel(excelData, this.bitbucketService.getSelectedDashBoardData().repo_slug,'compare_branches_'+this.selectedToBranchName+"__"+this.selectedFromBranchName);
   }
 
   applyFilter(filterValue: string) {        
