@@ -1,6 +1,7 @@
 # Code-Client  
-> A Desktop application to see git logs, commit changes and many other features of the       providers like Bitbucket, Github, GitLab etc.
-	It is an Angular Electron fused desktop application build using @ngxeu/cli and @ngxeu/core package along with angular and electron.
+> Code client is a desktop application to see git logs, commit changes, compare branches and many other features from providers like Bitbucket, Github, GitLab etc.
+
+>It is an Angular Electron fused desktop application build using @ngxeu/cli and @ngxeu/core package along with angular and electron.
   
 
 &nbsp;
