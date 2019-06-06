@@ -1,27 +1,44 @@
-# CodeClient
+# Code-Client  
+	A Desktop application to see git logs, commit changes and many other features of the providers like Bitbucket, Github, GitLab etc.
+	It is an Angular Electron fused desktop application build using @ngxeu/cli and @ngxeu/core package along with angular and electron.
+	
+	
+	
+- [ ] `1.0.0-rc.1 (Released)`
+	
+	##### Client support: `Bitbucket`
+	
+	##### Features: 
+- Recent Repository(Dashboard), Commit History, File History, Browse Files and Settings screens.
+- Commit history view with dynamic pagination and dynamic data load.
+- Commit history and file history view incorporates filter by author, date and simple text search.
+- Multiple tabs have ready to export button at any point or filtered data.
+- File browser tab to quickly search the file and jump into the commits of the respective branch names.
+- Dedicated settings tab to configure the client, access related info and the editable endpoint URL's.
+- File Diff at commit history and file history tab to quickly see the file changes that has been done.
+- Beautified File Diff shows file name and quick jump to the section.
+- Load all commit functionality to load all commits of a branch at once.
+- File changes button to show file changes with Tree-View and Table-view functionality.
+- Branch name with merge settings and search functionality.
+- Commit History screen with single click expand the changes and right click view changes feature.
+- App auto update functionality to handle and any future updates automatically without the need of re-downloading the complete app.
+	
+	
+- [ ] `1.0.0-rc.2 (Release In Progress)`
+	
+#####  Client support: Bitbucket
+	
+#####  New Features :
+- Compare Branches Screen.
+- Download File/Files option on Commit History(right-click or near to view history) and File History.
+- Sticky File list in File Diff.
+	
+  #####  Bug Fixes :
+- Button alignment issue on commit history and file history screens.
+- File diff showing randomly on left and right side.
+- On click of back button on commit diff screen the commit history screens pagination goes away/same behaviour on file history diff.
+		
+	
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 7.3.9.
-
-## Development server
-
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
-
-## Code scaffolding
-
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
-
-## Build
-
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
-
-## Running unit tests
-
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+	
+	

@@ -1,286 +1,290 @@
-<div class="mat-elevation-z8 commit-history" *ngIf="!showFileDiff">
-    <div class="header-filter">
-        <div class="searchbar__container">
-            <div class="branch-filter">
-                <!-- <mat-select [(value)]="selectedBranchName" (selectionChange)="onChangeRepoBranch()">
-                  <ng-container *ngFor="let repoBranch of repoBranches">
-                      <mat-option [value]="repoBranch">{{repoBranch}}</mat-option> 
-                  </ng-container>
-                </mat-select> -->
-                <mat-form-field appearance="outline" class="branch__lov">
-                    <mat-label>
-                      <mat-svg-icon 
-                          matPrefix 
-                          title="Branch"
-                          icon="branch">
-                      </mat-svg-icon>
-                      Branch
-                    </mat-label>
-                    <mat-select 
-                      [formControl]="branchNameCtrl" 
-                      [(value)]="selectedBranchName"
-                      placeholder="Branch" 
-                      (selectionChange)="onChangeRepoBranch()"
-                      #branchSelect>
-                      <mat-option>
-                        <ngx-mat-select-search 
-                        placeholderLabel="Enter branch name"
-                        [formControl]="branchNameFilterCtrl">
+<div class="mat-elevation-z8 commit-history">
+    <div *ngIf="!showFileDiff">
+      <div class="header-filter">
+          <div class="searchbar__container">
+              <div class="branch-filter">
+                  <!-- <mat-select [(value)]="selectedBranchName" (selectionChange)="onChangeRepoBranch()">
+                    <ng-container *ngFor="let repoBranch of repoBranches">
+                        <mat-option [value]="repoBranch">{{repoBranch}}</mat-option> 
+                    </ng-container>
+                  </mat-select> -->
+                  <mat-form-field appearance="outline" class="branch__lov">
+                      <mat-label>
                         <mat-svg-icon 
-                          matPrefix 
-                          title="Clear"
-                          ngxMatSelectSearchClear
-                          icon="close">
-                      </mat-svg-icon>
-                      </ngx-mat-select-search>
-                      </mat-option>
-                
-                      <mat-option *ngFor="let branch of filteredBranchNames | async" [value]="branch">
-                        {{branch}}
-                      </mat-option>
-                    </mat-select>
-                </mat-form-field>
-                <mat-form-field appearance="outline" class="merge-setting__lov">
-                    <mat-label>
-                      <mat-svg-icon 
-                          matPrefix 
-                          title="Merge Setting"
-                          icon="merge">
-                      </mat-svg-icon>
-                      Merge Setting
-                    </mat-label>
-                    <mat-select 
-                      placeholder="Merge Type" 
-                      [(value)]="selectedMergeSetting"
-                      (selectionChange)="onChangeMergeSetting()"
-                      >
-                      <mat-option value="include">
-                        Show Merges
-                      </mat-option>
-                      <mat-option value="exclude">
-                        Hide Merges
-                      </mat-option>
-                    </mat-select>
-                </mat-form-field>
-            </div>
-            <ng-container>
-              <div class="seachboxText__container" [ngClass]="{'slide__out': !showSearchBox, 'slide__in': showSearchBox}">
-                  <mat-form-field class="seachboxText__input">
-                      <mat-svg-icon                               
-                          matPrefix 
-                          title="Match Whole Word"
-                          icon="match_case"
-                          transform="scale(1.5)" 
-                          [ngStyle]="strictMatch && {'border':'1.5px solid #3f51b5'}"
-                          (onClickEvent)="toggleMatchCase()"
-                          button="true">
-                      </mat-svg-icon> 
-                      <input class="filter__input"
-                          matInput 
-                          [(ngModel)]="filterString"
-                          (keyup)="applyFilter($event.target.value)"                    
-                          >
-                          <!-- (focus)="setupFilter('name')" -->   
-                  </mat-form-field>
-                  <mat-form-field class="seachboxText__lov" >
-                    <mat-select
-                      placeholder="Column"
-                      [(value)]="lovSelected">
-                        <mat-option value="all">All</mat-option> 
-                        <ng-container *ngFor="let filterColumn of filterColumns">
-                            <mat-option [value]="filterColumn">{{filterColumn | titlecase}}</mat-option> 
-                        </ng-container>                                        
-                    </mat-select>
-                  </mat-form-field>
-                  <mat-svg-icon 
-                    class="filter__close"
-                    button="true"
-                    (onClickEvent)="closeSearchBox()"
-                    title="Close"
-                    icon="close">
-                  </mat-svg-icon>
-              </div>                  
-            </ng-container>                
-            <div class="toolbar__btns" [ngClass]="{'slide-toolbar__in': showSearchBox}">
-              <!-- <div class="searchBtn">
-
-              </div> -->
-              <ng-container  *ngIf="showToolBarBtns">
-                <mat-svg-icon  
-                  icon="search" 
-                  title="Search"
-                  [disabled]="!dataSource.data?.length>0"
-                  button="true"
-                  class="filter__icon"
-                  (onClickEvent)="enableSearchBox()">
-                </mat-svg-icon>
-              </ng-container> 
-              <!-- <div class="otherBtns">
+                            matPrefix 
+                            title="Branch"
+                            icon="branch">
+                        </mat-svg-icon>
+                        Branch
+                      </mat-label>
+                      <mat-select 
+                        [formControl]="branchNameCtrl" 
+                        [(value)]="selectedBranchName"
+                        placeholder="Branch" 
+                        (selectionChange)="onChangeRepoBranch()"
+                        #branchSelect>
+                        <mat-option>
+                          <ngx-mat-select-search 
+                          placeholderLabel="Enter branch name"
+                          [formControl]="branchNameFilterCtrl">
+                          <mat-svg-icon 
+                            matPrefix 
+                            title="Clear"
+                            ngxMatSelectSearchClear
+                            icon="close">
+                        </mat-svg-icon>
+                        </ngx-mat-select-search>
+                        </mat-option>
                   
-              </div>                         -->
-              <ng-container  *ngIf="showToolBarBtns">
+                        <mat-option *ngFor="let branch of filteredBranchNames | async" [value]="branch">
+                          {{branch}}
+                        </mat-option>
+                      </mat-select>
+                  </mat-form-field>
+                  <mat-form-field appearance="outline" class="merge-setting__lov">
+                      <mat-label>
+                        <mat-svg-icon 
+                            matPrefix 
+                            title="Merge Setting"
+                            icon="merge">
+                        </mat-svg-icon>
+                        Merge Setting
+                      </mat-label>
+                      <mat-select 
+                        placeholder="Merge Type" 
+                        [(value)]="selectedMergeSetting"
+                        (selectionChange)="onChangeMergeSetting()"
+                        >
+                        <mat-option value="include">
+                          Show Merges
+                        </mat-option>
+                        <mat-option value="exclude">
+                          Hide Merges
+                        </mat-option>
+                      </mat-select>
+                  </mat-form-field>
+              </div>
+              <ng-container>
+                <div class="seachboxText__container" [ngClass]="{'slide__out': !showSearchBox, 'slide__in': showSearchBox}">
+                    <mat-form-field class="seachboxText__input">
+                        <mat-svg-icon                               
+                            matPrefix 
+                            title="Match Whole Word"
+                            icon="match_case"
+                            transform="scale(1.5)" 
+                            [ngStyle]="strictMatch && {'border':'1.5px solid #3f51b5'}"
+                            (onClickEvent)="toggleMatchCase()"
+                            button="true">
+                        </mat-svg-icon> 
+                        <input class="filter__input"
+                            matInput 
+                            [(ngModel)]="filterString"
+                            (keyup)="applyFilter($event.target.value)"                    
+                            >
+                            <!-- (focus)="setupFilter('name')" -->   
+                    </mat-form-field>
+                    <mat-form-field class="seachboxText__lov" >
+                      <mat-select
+                        placeholder="Column"
+                        [(value)]="lovSelected">
+                          <mat-option value="all">All</mat-option> 
+                          <ng-container *ngFor="let filterColumn of filterColumns">
+                              <mat-option [value]="filterColumn">{{filterColumn | titlecase}}</mat-option> 
+                          </ng-container>                                        
+                      </mat-select>
+                    </mat-form-field>
+                    <mat-svg-icon 
+                      class="filter__close"
+                      button="true"
+                      (onClickEvent)="closeSearchBox()"
+                      title="Close"
+                      icon="close">
+                    </mat-svg-icon>
+                </div>                  
+              </ng-container>                
+              <div class="toolbar__btns" [ngClass]="{'slide-toolbar__in': showSearchBox}">
+                <!-- <div class="searchBtn">
+  
+                </div> -->
+                <ng-container  *ngIf="showToolBarBtns">
                   <mat-svg-icon  
-                      title="Filter Results" 
-                      icon="filter" 
-                      [disabled]="!dataSource.data?.length>0"
-                      button="true"
-                      class="filter__icon"
-                      (onClickEvent)="openFilterDialog()"
-                  ></mat-svg-icon>
-                  <mat-svg-icon  
-                      title="View All" 
-                      icon="view_all" 
-                      button="true"
-                      class="filter__icon"
-                      [disabled]="!dataSource.data?.length>0 || commitHistoryResponse && commitHistoryResponse.isLastPage"
-                      (onClickEvent)="fetchAllCommitHistory()"
-                      ></mat-svg-icon>
-                  </ng-container> 
+                    icon="search" 
+                    title="Search"
+                    [disabled]="!dataSource.data?.length>0"
+                    button="true"
+                    class="filter__icon"
+                    (onClickEvent)="enableSearchBox()">
+                  </mat-svg-icon>
+                </ng-container> 
+                <!-- <div class="otherBtns">
+                    
+                </div>                         -->
+                <ng-container  *ngIf="showToolBarBtns">
                     <mat-svg-icon  
-                      title="Show File Changes" 
-                      icon="file_changes"
-                      [disabled]="!dataSource.data?.length>0 || disableShowFileChanges"
-                      button="true"
-                      class="filter__icon"
-                      (onClickEvent)="openShowFileChangesDialog()"
-                    ></mat-svg-icon>           
-                    <mat-svg-icon  
-                        title="Export To Excel" 
-                        icon="xls_glossy" 
+                        title="Filter Results" 
+                        icon="filter" 
                         [disabled]="!dataSource.data?.length>0"
                         button="true"
-                        (onClickEvent)="exportToExcel()"
-                    ></mat-svg-icon>  
-                <!-- <mat-svg-icon  title="Edit Columns" icon="edit_column" button="true"></mat-svg-icon> -->
-            </div>
-        </div>
-    </div>
-    <div class="filter__result">
-        <mat-chip-list class="mat-chip-list-stacked overflow-auto">
-            <mat-chip *ngFor="let successMatch of foundMatchCaseArray" class="success" selected>
-                {{successMatch}}
-            </mat-chip>
-            <mat-chip *ngFor="let noMatch of notFoundMatchCaseArray" color="warn" selected>
-                {{noMatch}}
-            </mat-chip>    
-        </mat-chip-list>
-    </div>
-    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort multiTemplateDataRows>
-        <ng-container matColumnDef="{{ column }}"
-            *ngFor="let column of displayedColumns"
-            >
-            <ng-container *ngIf="column== 'select'; else other_ths">
+                        class="filter__icon"
+                        (onClickEvent)="openFilterDialog()"
+                    ></mat-svg-icon>
+                    <mat-svg-icon  
+                        title="View All" 
+                        icon="view_all" 
+                        button="true"
+                        class="filter__icon"
+                        [disabled]="!dataSource.data?.length>0 || commitHistoryResponse && commitHistoryResponse.isLastPage"
+                        (onClickEvent)="fetchAllCommitHistory()"
+                        ></mat-svg-icon>
+                    </ng-container> 
+                      <mat-svg-icon  
+                        title="Show File Changes" 
+                        icon="file_changes"
+                        [disabled]="!dataSource.data?.length>0 || disableShowFileChanges"
+                        button="true"
+                        class="filter__icon"
+                        (onClickEvent)="openShowFileChangesDialog()"
+                      ></mat-svg-icon>           
+                      <mat-svg-icon  
+                          title="Export To Excel" 
+                          icon="xls_glossy" 
+                          [disabled]="!dataSource.data?.length>0"
+                          button="true"
+                          (onClickEvent)="exportToExcel()"
+                      ></mat-svg-icon>  
+                  <!-- <mat-svg-icon  title="Edit Columns" icon="edit_column" button="true"></mat-svg-icon> -->
+              </div>
+          </div>
+      </div>
+      <div class="filter__result">
+          <mat-chip-list class="mat-chip-list-stacked overflow-auto">
+              <mat-chip *ngFor="let successMatch of foundMatchCaseArray" class="success" selected>
+                  {{successMatch}}
+              </mat-chip>
+              <mat-chip *ngFor="let noMatch of notFoundMatchCaseArray" color="warn" selected>
+                  {{noMatch}}
+              </mat-chip>    
+          </mat-chip-list>
+      </div>
+      <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort multiTemplateDataRows>
+          <ng-container matColumnDef="{{ column }}"
+              *ngFor="let column of displayedColumns"
+              >
+              <ng-container *ngIf="column== 'select'; else other_ths">
+                  <th mat-header-cell *matHeaderCellDef>
+                    <mat-checkbox #selectAllCommitCheckBox
+                        id="selecteAll"
+                        color="accent"
+                        (change)="onSelectAllCommits($event)"
+                    >
+                    </mat-checkbox>                 
+                  </th>
+              </ng-container>
+              <ng-template #other_ths>
                 <th mat-header-cell *matHeaderCellDef>
-                  <mat-checkbox #selectAllCommitCheckBox
-                      id="selecteAll"
-                      color="accent"
-                      (change)="onSelectAllCommits($event)"
-                  >
-                  </mat-checkbox>                 
+                    {{ column | titlecase }}
                 </th>
-            </ng-container>
-            <ng-template #other_ths>
-              <th mat-header-cell *matHeaderCellDef>
-                  {{ column | titlecase }}
-              </th>
-            </ng-template>
-                <ng-container *ngIf="column == 'select'; else other_than_select">
-                    <td mat-cell *matCellDef="let element" (click)="$event.stopPropagation()">
-                      <mat-checkbox
-                        [name]="column" 
-                        [id]="element[column]" 
-                        color="primary"
-                        (ngModelChange)="element['checked']= $event ? true : false"
-                        (change)="onSelectCommit($event)"
-                        [ngModel]="element['checked']"
-                      ></mat-checkbox>
-                    </td>
-                </ng-container>
-                <ng-template #other_than_select>
-                    <td mat-cell *matCellDef="let element">
-                    <ng-container *ngIf="column == 'commitId'; else other_column">
-                        <div class="hash__container">
-                            <span class="clipboard-icon__container">
-                            <mat-svg-icon
-                                class="clipboard-icon"
-                                icon="clipboard"
-                                button="true"
-                                [copy-to-clipboard]="element[column]"
-                                haltOtherEvents="true"
-                            ></mat-svg-icon>
-                            </span>
-                            <span class="hashid__container">{{ element[column] }}</span>
-                        </div>
-                    </ng-container>
-                    <ng-template #other_column> {{ element[column] }} </ng-template>
-                    </td>
-                </ng-template>            
-        </ng-container>
-         <!--expand data-->
-      <ng-container matColumnDef="expandedDetail" class="detail-container">
-            <td
-              mat-cell
-              *matCellDef="let element"
-              [attr.colspan]="displayedColumns.length"
-            >
-              <div
-                class="example-element-detail"
-                [@detailExpand]="
-                isCommitHistoryExpanded && expandedElement.commitId == element.commitId ? 'expanded' : 'collapsed'
-                "
-                *ngIf="expandedElement"
+              </ng-template>
+                  <ng-container *ngIf="column == 'select'; else other_than_select">
+                      <td mat-cell *matCellDef="let element" (click)="$event.stopPropagation()">
+                        <mat-checkbox
+                          [name]="column" 
+                          [id]="element[column]" 
+                          color="primary"
+                          (ngModelChange)="element['checked']= $event ? true : false"
+                          (change)="onSelectCommit($event)"
+                          [ngModel]="element['checked']"
+                        ></mat-checkbox>
+                      </td>
+                  </ng-container>
+                  <ng-template #other_than_select>
+                      <td mat-cell *matCellDef="let element">
+                      <ng-container *ngIf="column == 'commitId'; else other_column">
+                          <div class="hash__container">
+                              <span class="clipboard-icon__container">
+                              <mat-svg-icon
+                                  class="clipboard-icon"
+                                  icon="clipboard"
+                                  button="true"
+                                  [copy-to-clipboard]="element[column]"
+                                  haltOtherEvents="true"
+                              ></mat-svg-icon>
+                              </span>
+                              <span class="hashid__container">{{ element[column] }}</span>
+                          </div>
+                      </ng-container>
+                      <ng-template #other_column> {{ element[column] }} </ng-template>
+                      </td>
+                  </ng-template>            
+          </ng-container>
+            <!--expand data-->
+        <ng-container matColumnDef="expandedDetail" class="detail-container">
+              <td
+                mat-cell
+                *matCellDef="let element"
+                [attr.colspan]="displayedColumns.length"
               >
                 <div
-                  class="example-element-diagram"
-                  *ngFor="let commit of expandedElement.commitedFiles"
+                  class="example-element-detail"
+                  [@detailExpand]="
+                  isCommitHistoryExpanded && expandedElement.commitId == element.commitId ? 'expanded' : 'collapsed'
+                  "
+                  *ngIf="expandedElement"
                 >
                   <div
-                    class="example-element-position"
-                    [style.color]="commit.color"
+                    class="example-element-diagram"
+                    *ngFor="let commit of expandedElement.commitedFiles"
                   >
-                    {{ commit.fileName }}
-                  </div>
-                  <div
-                    class="example-element-position"
-                    [style.color]="commit.color"
-                  >
-                    <mat-svg-icon
-                      *ngIf="commit.fileStatus"
-                      icon="history_blue"
-                      title="Show File History"
-                      (onClickEvent)="showFileHistory(expandedElement.commitId,commit.fileName)"
-                      button="true"
-                    ></mat-svg-icon>
-                    <mat-svg-icon
-                      button="true"
-                      [title]="commit.fileStatus | titlecase"
-                      [icon]="commit.fileStatus | lowercase"
-                    ></mat-svg-icon>
-                  </div>
-                </div>                
-                <!-- <div class="example-element-description">{{ element.message }}</div> -->
-              </div>
-            </td>
-          </ng-container>
-        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr 
-            mat-row *matRowDef="let element; columns: displayedColumns;"
-            class="example-element-row"
-            (contextmenu)="commitDetailsContextMenu.open($event,{ commit: element} )"
-            (click)="isCommitHistoryExpanded = !isCommitHistoryExpanded && getCommitHistoryFileChanges(element.commitId)"
+                    <div
+                      class="example-element-position"
+                      [style.color]="commit.color"
+                    >
+                      {{ commit.fileName }}
+                    </div>
+                    <div
+                      class="example-element-position"
+                      [style.color]="commit.color"
+                    >
+                      <mat-svg-icon
+                        *ngIf="commit.fileStatus"
+                        icon="history_blue"
+                        title="Show File History"
+                        (onClickEvent)="showFileHistory(expandedElement.commitId,commit.fileName)"
+                        button="true"
+                      ></mat-svg-icon>
+                      <mat-svg-icon
+                        button="true"
+                        [title]="commit.fileStatus | titlecase"
+                        [icon]="commit.fileStatus | lowercase"
+                      ></mat-svg-icon>
+                    </div>
+                  </div>                
+                  <!-- <div class="example-element-description">{{ element.message }}</div> -->
+                </div>
+              </td>
+            </ng-container>
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr 
+              mat-row *matRowDef="let element; columns: displayedColumns;"
+              class="example-element-row"
+              (contextmenu)="commitDetailsContextMenu.open($event,{ commit: element} )"
+              (click)="isCommitHistoryExpanded = !isCommitHistoryExpanded && getCommitHistoryFileChanges(element.commitId)"
+          ></tr>
+          <tr
+              class="detail-row"
+              mat-row
+              *matRowDef="let row; columns: ['expandedDetail']"
+              class="example-detail-row"
         ></tr>
-        <tr
-            class="detail-row"
-            mat-row
-            *matRowDef="let row; columns: ['expandedDetail']"
-            class="example-detail-row"
-      ></tr>
-    </table>
-    <mat-paginator 
+      </table>
+    </div>
+    <div [hidden]="showFileDiff">
+      <mat-paginator 
         [pageSizeOptions]="[5, 10, 20, 50, 100]" 
         showFirstLastButtons
-        (page)="getNext($event)"
-        ></mat-paginator>
+        (page)="getNext($event)">
+      </mat-paginator>
+    </div>
 </div>
 <mat-svg-icon 
     class="mrg__left-10"
