@@ -23,4 +23,5 @@ export class FileHistoryCompareBean {
     commitId: string;
     fileString: string;
     filePath?: string;
+    blobData?:any;
 }

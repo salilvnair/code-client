@@ -67,6 +67,14 @@ export class BitbucketApi  extends CodeClientBaseApi {
     return this.http.get(endpointUrl,{responseType:'text'});
   }
 
+  getBlobFileFromCommitId(queryParam?:QueryParam[]) {
+    let endpointUrl = this.prepareEndpointURLWithQueryParam(
+      this.bitbucketSettingService.getApiPrefix(),
+      this.bitbucketSettingService.getRawFileEndpointURL(),
+      queryParam);
+    return this.http.get(endpointUrl,{responseType:'blob'});
+  }
+
   getRepoFiles(queryParam?:QueryParam[]) {
     let endpointUrl = this.prepareEndpointURLWithQueryParam(
       this.bitbucketSettingService.getApiPrefix(),
