@@ -15,6 +15,7 @@ import { CommitHistoryFileChangesDialog } from '../commit-history/commit-history
 import { ProfileSetting } from 'src/app/settings/model/profile-setting.model';
 import { CodeClientProfileSettingComponent } from 'src/app/settings/profile/codeclient-profile-setting.component';
 import { FileHistoryBean, FileHistoryCompareBean } from '../model/file-history.model';
+import { CommonUtility } from 'src/app/util/common/common.util';
 
 @Injectable({
     providedIn: 'root'
@@ -292,18 +293,35 @@ export class BitbucketService {
             queryParam.param = BitbucketSettingConstant.QUERY_PARAM_FULL_SRC_PATH;
             queryParam.value = filePath;
             queryParams.push(queryParam);
-            this.bitbucketApi.getRawFileFromCommitId(queryParams).subscribe(response=>{
-                let fileString = response;
-                let fileHistoryCompareBean = new FileHistoryCompareBean();
-                fileHistoryCompareBean.commitId = commitId;
-                fileHistoryCompareBean.fileString = fileString;
-                fileHistoryCompareBean.filePath = filePath;
-                fileHistoryDetailData.push(fileHistoryCompareBean);
-                if(fileHistoryDetailData.length === commitIds.length) {
-                    let fileDetailData = fileHistoryDetailData;
-                    fileDetailDataNotifier.next(fileDetailData);
-                }
-            })
+            let fileExtension  = CommonUtility.getFileExtension(filePath);
+            if(fileExtension === 'xls' || fileExtension === 'xlsx') {
+                this.bitbucketApi.getBlobFileFromCommitId(queryParams).subscribe(response=>{
+                    let fileString = response;
+                    let fileHistoryCompareBean = new FileHistoryCompareBean();
+                    fileHistoryCompareBean.commitId = commitId;
+                    fileHistoryCompareBean.blobData = fileString;
+                    fileHistoryCompareBean.filePath = filePath;
+                    fileHistoryDetailData.push(fileHistoryCompareBean);
+                    if(fileHistoryDetailData.length === commitIds.length) {
+                        let fileDetailData = fileHistoryDetailData;
+                        fileDetailDataNotifier.next(fileDetailData);
+                    }
+                }) 
+            }
+            else {
+                this.bitbucketApi.getRawFileFromCommitId(queryParams).subscribe(response=>{
+                    let fileString = response;
+                    let fileHistoryCompareBean = new FileHistoryCompareBean();
+                    fileHistoryCompareBean.commitId = commitId;
+                    fileHistoryCompareBean.fileString = fileString;
+                    fileHistoryCompareBean.filePath = filePath;
+                    fileHistoryDetailData.push(fileHistoryCompareBean);
+                    if(fileHistoryDetailData.length === commitIds.length) {
+                        let fileDetailData = fileHistoryDetailData;
+                        fileDetailDataNotifier.next(fileDetailData);
+                    }
+                })
+            }            
         })
         return fileDetailDataNotifier;
     }

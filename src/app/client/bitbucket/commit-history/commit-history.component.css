@@ -160,9 +160,9 @@
       overflow:auto;
   }
 
-  .seachboxText__container{
+  .searchboxText__container{
     display: flex;
-    margin-top: 8px !important;
+    margin-top: 16px !important;
   }
 
   .seachboxText__input {

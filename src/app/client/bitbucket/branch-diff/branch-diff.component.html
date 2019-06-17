@@ -6,7 +6,7 @@
     title="Go Back"
     icon="return">
 </mat-svg-icon> -->
-<div class="mat-elevation-z8 file-history" *ngIf="!showFileDiff">    
+<div class="mat-elevation-z8 file-history">    
     <div class="header-filter">
         <div class="searchbar__container">
             <div class="branch-filter">
@@ -109,7 +109,7 @@
                 </mat-form-field>             
             </div>
             <ng-container>
-                <div class="seachboxText__container" [ngClass]="{'slide__out': !showSearchBox, 'slide__in': showSearchBox}">
+                <div class="searchboxText__container" [ngClass]="{'slide__out': !showSearchBox, 'slide__in': showSearchBox}">
                     <mat-form-field class="seachboxText__input">
                         <input class="filter__input"
                             matInput 
@@ -142,7 +142,7 @@
                   <mat-svg-icon  
                     icon="search" 
                     title="Search"
-                    [disabled]="!dataSource.data?.length>0"
+                    [disabled]="!(dataSource.data?.length>0)"
                     button="true"
                     class="filter__icon"
                     (onClickEvent)="enableSearchBox()">
@@ -152,7 +152,7 @@
                     <mat-svg-icon  
                         title="Filter Results" 
                         icon="filter" 
-                        [disabled]="!dataSource.data?.length>0"
+                        [disabled]="!(dataSource.data?.length>0)"
                         button="true"
                         class="filter__icon"
                         (onClickEvent)="openFilterDialog()"
@@ -161,7 +161,7 @@
                       <mat-svg-icon  
                           title="Export To Excel" 
                           icon="xls_glossy" 
-                          [disabled]="!dataSource.data?.length>0"
+                          [disabled]="!(dataSource.data?.length>0)"
                           button="true"
                           (onClickEvent)="exportToExcel()"
                       ></mat-svg-icon>                    
@@ -197,7 +197,7 @@
         <tr mat-row *matRowDef="let element; columns: displayedColumns;"
             class="example-element-row"></tr>
     </table>    
-    <div [hidden]="!dataSource.data?.length>0">
+    <div [hidden]="!(dataSource.data?.length>0)">
       <mat-paginator
         [pageSizeOptions]="[5, 10, 20, 50, 100]"
         showFirstLastButtons>

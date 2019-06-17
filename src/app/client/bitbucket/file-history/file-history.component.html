@@ -40,7 +40,7 @@
                     </mat-form-field>
                 </div>
                     <ng-container>
-                        <div class="seachboxText__container" [ngClass]="{'slide__out': !showSearchBox, 'slide__in': showSearchBox}">
+                        <div class="searchboxText__container" [ngClass]="{'slide__out': !showSearchBox, 'slide__in': showSearchBox}">
                             <mat-form-field class="seachboxText__input">
                                 <mat-svg-icon                               
                                     matPrefix 
@@ -81,7 +81,7 @@
                         <mat-svg-icon  
                         icon="search" 
                         title="Search"
-                        [disabled]="!dataSource.data?.length>0"
+                        [disabled]="!(dataSource.data?.length>0)"
                         button="true"
                         class="filter__icon"
                         (onClickEvent)="enableSearchBox()"
@@ -91,7 +91,7 @@
                         <mat-svg-icon  
                             title="Filter Results" 
                             icon="filter" 
-                            [disabled]="!dataSource.data?.length>0"
+                            [disabled]="!(dataSource.data?.length>0)"
                             button="true"
                             class="filter__icon"
                             (onClickEvent)="openFilterDialog()"
@@ -126,7 +126,7 @@
                             title="Export To Excel" 
                             icon="xls_glossy" 
                             class="filter__icon"
-                            [disabled]="!dataSource.data?.length>0"
+                            [disabled]="!(dataSource.data?.length>0)"
                             button="true"
                             (onClickEvent)="exportToExcel()"
                         ></mat-svg-icon>  

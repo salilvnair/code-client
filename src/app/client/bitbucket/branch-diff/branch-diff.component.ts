@@ -193,6 +193,7 @@ export class BranchDiffComponent implements OnInit {
     this.dataSource.data = compareData;
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
+    this.toBranchCommitIds = [];
   }
 
   onChangeMergeSetting() {

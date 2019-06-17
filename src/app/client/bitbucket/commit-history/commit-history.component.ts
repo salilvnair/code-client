@@ -18,6 +18,7 @@ import { FileHistoryBean } from '../model/file-history.model';
 import { NgxDiffFile } from '@salilvnair/ngx-diff';
 import { HeaderService } from 'src/app/header/header.service';
 import { CommonUtility } from 'src/app/util/common/common.util';
+import { BlobUtil } from 'src/app/util/blob.util';
 
 @Component({
     selector:'commit-history',
@@ -44,6 +45,7 @@ export class CommitHistoryComponent implements OnInit, AfterViewInit, OnDestroy 
                 private router: Router,
                 private excelUtil:ExcelUtil,
                 private headerService: HeaderService,
+                private blobUtil:BlobUtil,
                 private matHeaderProgressData:MatHeaderProgressData){}
     //dataSource: CommitHistoryData[] = [];
     dataSource = new MatTableDataSource<CommitHistoryData>();
@@ -586,8 +588,13 @@ export class CommitHistoryComponent implements OnInit, AfterViewInit, OnDestroy 
         this.matHeaderProgressData.setHidden(false);
         this.bitbucketService.getRawFileCommiDetailsFromCommitIds(commitIds, filePath).subscribe(fileHistoryBean=>{
             let fileData = fileHistoryBean[0].fileString;
-            this.matHeaderProgressData.setHidden(true);
-            CommonUtility.download(CommonUtility.getFileNameFromFullPath(filePath),fileData);
+            this.matHeaderProgressData.setHidden(true); 
+            if(fileData){
+                CommonUtility.download(CommonUtility.getFileNameFromFullPath(filePath),fileData);
+            }
+            else {
+                this.blobUtil.saveBlobFile(fileHistoryBean[0].blobData,CommonUtility.getFileNameFromFullPath(filePath));
+            }                       
         })
     }
 
