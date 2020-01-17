@@ -265,7 +265,7 @@ export class CommitHistoryComponent implements OnInit, AfterViewInit, OnDestroy 
                     //show context menu with commit details
                     commitHistoryData.parentCommitId  = parents[0].displayId;
                 }
-                commitHistoryData.date = dateFormat(date,'dd/mm/yyyy hh:mm:ss');
+                commitHistoryData.date = dateFormat(date,'dd/mm/yyyy h:MM:ss TT');
                 return commitHistoryData;
             })
             if(this.dataSource.data.length==0){
