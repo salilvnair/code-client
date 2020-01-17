@@ -125,7 +125,7 @@ export class FileHistoryComponent implements OnInit, AfterViewInit, OnDestroy  {
                 commitHistoryData.author = author.displayName?author.displayName:author.name;
                 commitHistoryData.commitId = displayId;
                 commitHistoryData.commitMessage = message;
-                commitHistoryData.date = dateFormat(date,'dd/mm/yyyy hh:mm:ss');
+                commitHistoryData.date = dateFormat(date,'dd/mm/yyyy h:MM:ss TT Z');
                 return commitHistoryData;
             })
             if(this.dataSource.data.length==0){

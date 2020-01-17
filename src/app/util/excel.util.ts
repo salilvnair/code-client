@@ -16,7 +16,7 @@ export class ExcelUtil {
         
 
         /* save to file */
-        const fileName = "CodeClient_"+repo+"_"+branch+"_"+dateFormat(new Date(),'dd/mm/yyyy hh:mm:ss');
+        const fileName = "CodeClient_"+repo+"_"+branch+"_"+dateFormat(new Date(),'dd/mm/yyyy h:MM:ss TT Z');
         XLSX.writeFile(wb, fileName+'.xlsx');
     }
 
