@@ -43,7 +43,7 @@
 	
 	
 	
-- [ ] `1.0.0-rc.1 (Released)
+- [ ] 1.0.0-rc.1 (Released)
 
 
 ##### Client support: ```Bitbucket```
