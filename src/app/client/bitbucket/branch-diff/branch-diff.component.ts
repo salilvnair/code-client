@@ -415,7 +415,7 @@ export class BranchDiffComponent implements OnInit {
                 //show context menu with commit details
                 commitHistoryData.parentCommitId  = parents[0].displayId;
             }
-            commitHistoryData.date = dateFormat(date,'dd/mm/yyyy h:MM:ss TT Z');
+            commitHistoryData.date = dateFormat(date,'dd/mm/yyyy h:MM:ss TT');
             return commitHistoryData;
         })
         branchCommitHistoryDataNotifier.next(branchCommitHistoryData);
