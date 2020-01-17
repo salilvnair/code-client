@@ -8,6 +8,39 @@
 &nbsp;
 &nbsp;
   
+  
+  
+ - [x] `1.0.0-rc.3`
+	
+#####  Client support: Bitbucket
+	
+
+#####  Bug Fixes :
+- Commit Timestamp is showing current month instead of minute format bug.
+- Downloading excel sheets gives invalid/corrupted file exception.
+- Compare branch works inconsistently sometimes it works sometimes it wont load.
+
+ &nbsp;
+ &nbsp;
+ &nbsp;
+ &nbsp;
+	
+  
+- [ ] `1.0.0-rc.2`
+	
+#####  Client support: Bitbucket
+	
+#####  Features :
+- Compare Branches Screen.
+- Download File/Files option on Commit History(right-click or near to view history) and File History.
+- Sticky File list in File Diff.
+	
+  #####  Bug Fixes :
+- Button alignment issue on commit history and file history screens.
+- File diff showing randomly on left and right side.
+- On click of back button on commit diff screen the commit history screens pagination goes away/same behaviour on file history diff.
+		
+	
 	
 	
 - [ ] `1.0.0-rc.1 (Released)
@@ -29,29 +62,7 @@
 - Branch name with merge settings and search functionality.
 - Commit History screen with single click expand the changes and right click view changes feature.
 - App auto update functionality to handle and any future updates automatically without the need of re-downloading the complete app.
-	
-	
- &nbsp;
- &nbsp;
- &nbsp;
- &nbsp;
- 
-  
-- [ ] `1.0.0-rc.2 (Release In Progress)`
-	
-#####  Client support: Bitbucket
-	
-#####  New Features :
-- Compare Branches Screen.
-- Download File/Files option on Commit History(right-click or near to view history) and File History.
-- Sticky File list in File Diff.
-	
-  #####  Bug Fixes :
-- Button alignment issue on commit history and file history screens.
-- File diff showing randomly on left and right side.
-- On click of back button on commit diff screen the commit history screens pagination goes away/same behaviour on file history diff.
-		
-	
+
 
 	
 	
