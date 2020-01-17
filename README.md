@@ -12,7 +12,7 @@
   
  - [x] `1.0.0-rc.3`
 	
-#####  Client support: Bitbucket
+#####  Client support: ```Bitbucket```
 	
 
 #####  Bug Fixes :
@@ -28,14 +28,14 @@
   
 - [ ] `1.0.0-rc.2`
 	
-#####  Client support: Bitbucket
+#####  Client support: ```Bitbucket```
 	
 #####  Features :
 - Compare Branches Screen.
 - Download File/Files option on Commit History(right-click or near to view history) and File History.
 - Sticky File list in File Diff.
 	
-  #####  Bug Fixes :
+#####  Bug Fixes :
 - Button alignment issue on commit history and file history screens.
 - File diff showing randomly on left and right side.
 - On click of back button on commit diff screen the commit history screens pagination goes away/same behaviour on file history diff.
@@ -46,7 +46,7 @@
 - [ ] `1.0.0-rc.1 (Released)
 
 
-##### Client support: `Bitbucket`
+##### Client support: ```Bitbucket```
 	
 ##### Features: 
 - Recent Repository(Dashboard), Commit History, File History, Browse Files and Settings screens.
